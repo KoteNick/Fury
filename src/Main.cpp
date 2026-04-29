@@ -14,9 +14,43 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-void error_callback(int error, const char* description)
+static void error_callback(int error, const char* description)
 {
     fprintf(stderr, "GLFW Error: %s\n", description);
+}
+
+void APIENTRY openglCallbackFunction(GLenum source,
+    GLenum type,
+    GLuint id,
+    GLenum severity,
+    GLsizei length,
+    const GLchar* message,
+    const void* userParam) {
+
+    if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) return;
+
+    std::stringstream ss;
+
+    ss << '[';
+    switch (type) {
+    case GL_DEBUG_TYPE_ERROR:               std::cerr << "ERROR"; break;
+    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: std::cerr << "DEPRECATED"; break;
+    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  std::cerr << "UNDEFINED"; break;
+    case GL_DEBUG_TYPE_PORTABILITY:         std::cerr << "PORTABILITY"; break;
+    case GL_DEBUG_TYPE_PERFORMANCE:         std::cerr << "PERFORMANCE"; break;
+    default:                                std::cerr << "OTHER"; break;
+    }
+    std::cerr << "] ID: " << id << " | Severity: ";
+
+    switch (severity) {
+    case GL_DEBUG_SEVERITY_LOW:    std::cerr << "LOW"; break;
+    case GL_DEBUG_SEVERITY_MEDIUM: std::cerr << "MEDIUM"; break;
+    case GL_DEBUG_SEVERITY_HIGH:   std::cerr << "HIGH"; break;
+    }
+    std::cerr << message << std::endl;
+
+    if (severity == GL_DEBUG_SEVERITY_HIGH)
+        __debugbreak();
 }
 
 int main(void)
@@ -34,7 +68,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(960, 540, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(960, 540, "Fury", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -63,6 +97,10 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     {
+        glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        glDebugMessageCallback(openglCallbackFunction, nullptr);
+        //glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -106,9 +144,9 @@ int main(void)
 
     }
 
-    glfwTerminate();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+    glfwTerminate();
     return 0;
 }
