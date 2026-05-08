@@ -1,23 +1,30 @@
 #pragma once
+#include <GL/glew.h>
 #include <string>
 #include <unordered_map>
 #include "glm/glm.hpp"
 
-enum class ShaderType;
-
-
+enum class ShaderType {
+	NONE = -1, VERTEX = GL_VERTEX_SHADER, FRAGMENT = GL_FRAGMENT_SHADER
+};
 
 class Shader
 {
+public:
 	struct ShaderTuple
 	{
 		std::string fp;
 		ShaderType type;
 	};
+	struct UniformInfo {
+		int location;
+		unsigned int type;
+	};
 private:
+	bool wasCompiled;
 	unsigned int m_RendererID;
 	std::string m_fp;
-	std::unordered_map<std::string, int> m_uniLocCache;
+	std::unordered_map<std::string, UniformInfo> m_uniLocCache;
 public:
 	Shader();
 	//Shader(std::initializer_list<ShaderTuple> list);
@@ -39,7 +46,9 @@ private:
 	void ParseShader(const std::string& filepath, ShaderType type);
 	void ParseShaderAuto(const std::string& filepath);
 	unsigned int CompileShader(ShaderType type, const std::string& source);
-	void AttachShader(ShaderType type, const std::string& source);
-	int GetUnifromLocation(const std::string& name);
+	void AttachCompiledShader(ShaderType type, const std::string& source);
+
+	void CacheActiveUniforms();
+	int GetUniformLocation(const std::string& name, unsigned int dataType);
 };
 

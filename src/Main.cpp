@@ -14,6 +14,9 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "Renderer/Renderer.h"
+#include "Renderer/Vertex.h"
+
 static void error_callback(int error, const char* description)
 {
     fprintf(stderr, "GLFW Error: %s\n", description);
@@ -29,9 +32,7 @@ void APIENTRY openglCallbackFunction(GLenum source,
 
     if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) return;
 
-    std::stringstream ss;
-
-    ss << '[';
+    std::cerr << '[';
     switch (type) {
     case GL_DEBUG_TYPE_ERROR:               std::cerr << "ERROR"; break;
     case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: std::cerr << "DEPRECATED"; break;
@@ -105,7 +106,23 @@ int main(void)
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        
+        std::vector<Vertex2D> v = {
+            {+0.0, +0.5, 1.0, 1.0, 1.0},
+            {-0.5, -0.5, 1.0, 1.0, 0.0},
+            {+0.5, -0.5, 0.0, 1.0, 1.0}
+        };
+        VertexData vd(v);
+        vd.layout
+            .Push<float>(2)
+            .Push<float>(3);
+        Mesh triangle(vd);
+
+        Shader shader;
+        shader
+            .AddProgram("assets/shaders/Basic2D.frag", ShaderType::FRAGMENT)
+            .AddProgram("assets/shaders/Basic2D.vert", ShaderType::VERTEX)
+            .Build();
+        Material mat(&shader);
 
         float time = 0;
         int width, height;
@@ -126,6 +143,7 @@ int main(void)
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
 
+            renderer.Draw(RenderCall(triangle, mat));
             
             ImGui::Begin("Test");
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);

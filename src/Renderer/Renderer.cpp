@@ -24,6 +24,17 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
     GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
 }
 
+void Renderer::Draw(RenderCall call)
+{
+    call.material->shader->Bind();
+    call.mesh->Bind();
+
+    if (call.mesh->UseIndexBuffer())
+        glDrawElements(GL_TRIANGLES, call.mesh->Count(), GL_UNSIGNED_INT, nullptr);
+    else
+        glDrawArrays(GL_TRIANGLES, 0, call.mesh->Count());
+}
+
 void Renderer::Clear() const
 {
     GLCall(glClear(GL_COLOR_BUFFER_BIT));

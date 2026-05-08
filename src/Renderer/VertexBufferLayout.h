@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include "Renderer.h"
 #include <GL/glew.h>
 
 struct VertexBufferElement
@@ -17,11 +16,10 @@ struct VertexBufferElement
 			case GL_UNSIGNED_INT:
 				return sizeof(GLuint);
 			case GL_UNSIGNED_BYTE:
-				return sizeof(GLbyte);
+				return sizeof(GLubyte);
 			default:
 				break;
 		}
-		ASSERT(false);
 		return 0;
 	}
 };
@@ -35,23 +33,27 @@ public:
 	VertexBufferLayout() : m_Stride(0) {};
 
 	template<typename T>
-	void Push(unsigned int count) {
-		static_assert(false);
+	inline VertexBufferLayout& Push(unsigned int count) {
+		static_assert(sizeof(T) == 0, "Unsupported type for VertexBufferLayout!");
+		return *this;
 	}
 	template<>
-	void Push<float>(unsigned int count) {
+	inline VertexBufferLayout& Push<float>(unsigned int count) {
 		m_Elements.push_back({ GL_FLOAT, count, GL_FALSE });
 		m_Stride += sizeof(GLfloat) * count;
+		return *this;
 	}
 	template<>
-	void Push<unsigned int>(unsigned int count) {
+	inline VertexBufferLayout& Push<unsigned int>(unsigned int count) {
 		m_Elements.push_back({ GL_UNSIGNED_INT, count, GL_FALSE });
 		m_Stride += sizeof(GLuint) * count;
+		return *this;
 	}
 	template<>
-	void Push<unsigned char>(unsigned int count) {
+	inline VertexBufferLayout& Push<unsigned char>(unsigned int count) {
 		m_Elements.push_back({ GL_UNSIGNED_BYTE, count, GL_TRUE });
 		m_Stride += sizeof(GLbyte) * count;
+		return *this;
 	}
 
 	inline const std::vector<VertexBufferElement>& GetElements() const { return m_Elements; }

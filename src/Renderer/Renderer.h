@@ -3,6 +3,8 @@
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
+#include "Material.h"
+#include "Mesh.h"
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GLCall(x) GLClearError();\
@@ -13,12 +15,31 @@ void GLClearError();
 
 bool GLLogCall(const char* function, const char* file, int line);
 
-enum class ShaderType {
-    NONE = -1, VERTEX = GL_VERTEX_SHADER, FRAGMENT = GL_FRAGMENT_SHADER
+struct RenderCall
+{
+    Mesh* mesh;
+    Material* material;
+    RenderCall(Mesh& mesh, Material& material) {
+        this->mesh = &mesh;
+        this->material = &material;
+    }
 };
 
+
 class Renderer {
+private:
+    Renderer() {}
+    ~Renderer() {}
 public:
+    static Renderer& Instance() {
+        static Renderer instance;
+        return instance;
+    }
+    Renderer(const Renderer&) = delete;
+    Renderer& operator=(const Renderer&) = delete;
     void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+    void Draw(RenderCall call);
     void Clear() const;
 };
+
+static Renderer& renderer = Renderer::Instance();

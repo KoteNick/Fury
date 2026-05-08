@@ -7,6 +7,7 @@
 
 Shader::Shader()
 {
+    wasCompiled = false;
     m_RendererID = glCreateProgram();
 }
 
@@ -17,6 +18,7 @@ Shader::~Shader()
 
 void Shader::Bind() const
 {
+    assert(wasCompiled && "Shader was not compiled");
     glUseProgram(m_RendererID);
 }
 
@@ -27,32 +29,38 @@ void Shader::Unbind() const
 
 void Shader::SetUniform1i(const std::string& name, int v)
 {
-    glUniform1i(GetUnifromLocation(name), v);
+    if (int location = GetUniformLocation(name, GL_INT); location != -1)
+        glUniform1i(location, v);
 }
 
 void Shader::SetUniform1f(const std::string& name, float v)
 {
-    glUniform1f(GetUnifromLocation(name), v);
+    if (int location = GetUniformLocation(name, GL_FLOAT); location != -1)
+        glUniform1f(location, v);
 }
 
 void Shader::SetUniform1iv(const std::string& name, unsigned int count, int* v)
 {
-    glUniform1iv(GetUnifromLocation(name), count, v);
+    if (int location = GetUniformLocation(name, GL_INT); location != -1)
+        glUniform1iv(location, count, v);
 }
 
 void Shader::SetUniform3f(const std::string& name, float v0, float v1, float v2)
 {
-    glUniform3f(GetUnifromLocation(name), v0, v1, v2);
+    if (int location = GetUniformLocation(name, GL_FLOAT_VEC3); location != -1)
+        glUniform3f(location, v0, v1, v2);
 }
 
 void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
 {
-    glUniform4f(GetUnifromLocation(name), v0, v1, v2, v3);
+    if (int location = GetUniformLocation(name, GL_FLOAT_VEC4); location != -1)
+        glUniform4f(location, v0, v1, v2, v3);
 }
 
 void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
 {
-    glUniformMatrix4fv(GetUnifromLocation(name), 1, GL_FALSE, &matrix[0][0]);
+    if (int location = GetUniformLocation(name, GL_FLOAT_MAT4); location != -1)
+        glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
 }
 
 Shader& Shader::AddProgram(const std::string& filepath, ShaderType type)
@@ -64,6 +72,7 @@ Shader& Shader::AddProgram(const std::string& filepath, ShaderType type)
 Shader& Shader::Build() {
     glLinkProgram(m_RendererID);
     glValidateProgram(m_RendererID);
+    wasCompiled = true;
     return *this;
 }
 
@@ -81,7 +90,7 @@ void Shader::ParseShader(const std::string& filepath, ShaderType type)
         ss << line << '\n';
     }
     
-    AttachShader(type, ss.str());
+    AttachCompiledShader(type, ss.str());
 
     return;
 }
@@ -106,7 +115,7 @@ void Shader::ParseShaderAuto(const std::string& filepath) {
     }
 
     for (auto& kv : shaderSources) {
-        AttachShader(kv.first, kv.second);
+        AttachCompiledShader(kv.first, kv.second);
     }
 }
 
@@ -131,21 +140,45 @@ unsigned int Shader::CompileShader(ShaderType type, const std::string& source) {
     return id;
 }
 
-void Shader::AttachShader(ShaderType type, const std::string& source)
+void Shader::AttachCompiledShader(ShaderType type, const std::string& source)
 {
     unsigned int id = CompileShader(type, source);
     glAttachShader(m_RendererID, id);
     glDeleteShader(id);
 }
 
-int Shader::GetUnifromLocation(const std::string& name)
+void Shader::CacheActiveUniforms()
 {
-    if (m_uniLocCache.find(name) != m_uniLocCache.end())
-        return m_uniLocCache[name];
+    int count;
+    glGetProgramiv(m_RendererID, GL_ACTIVE_UNIFORMS, &count);
 
-    int location = glGetUniformLocation(m_RendererID, name.c_str());
-    if (location == -1)
-        std::cout << "uniform " << name << " doesnt exist" << std::endl;
-    m_uniLocCache[name] = location;
-    return location;
+    const unsigned short bufSize = 256;
+    char name[bufSize];
+    int length;
+    int size;
+    unsigned int type;
+
+    for (int i = 0; i < count; i++) {
+        glGetActiveUniform(m_RendererID, (unsigned int)i, bufSize, &length, &size, &type, name);
+
+        int location = glGetUniformLocation(m_RendererID, name);
+
+        m_uniLocCache[std::string(name)] = { location, type };
+    }
+}
+
+int Shader::GetUniformLocation(const std::string& name, unsigned int dataType)
+{
+    auto it = m_uniLocCache.find(name);
+    if (it != m_uniLocCache.end()) {
+        if (dataType == it->second.type) {
+            return it->second.location;
+        }
+        else {
+            std::cout << "Wrong uniform type! " << name << std::endl;
+            return -1;
+        }
+    }
+    std::cout << "uniform " << name << " doesnt exist" << std::endl;
+    return -1;
 }
