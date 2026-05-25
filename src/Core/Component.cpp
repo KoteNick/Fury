@@ -41,10 +41,20 @@ glm::vec3 TransformComponent::GetUp() const {
     return glm::normalize(glm::vec3(GetRotationMatrix()[1]));
 }
 
-void TransformComponent::Move(float rightOffset, float upOffset, float forwardOffset) {
-    pos += GetRight() * rightOffset;
-    pos += GetUp() * upOffset;
-    pos += GetForward() * forwardOffset;
+void TransformComponent::Move(const glm::vec3& offset) {
+    pos += GetRight() * offset.x + GetUp() * offset.y + GetForward() * offset.z;
+}
+
+void TransformComponent::Rotate(const glm::vec3& rotation)
+{
+    rot += rotation;
+}
+
+void TransformComponent::OnUpdate(float deltaTime)
+{
+    rot.x = std::fmod(rot.x, 360.0f);
+    rot.y = std::fmod(rot.y, 360.0f);
+    rot.z = std::fmod(rot.z, 360.0f);
 }
 
 std::unique_ptr<Component> TransformComponent::Clone() const

@@ -35,7 +35,7 @@ private:
 	std::unique_ptr<IndexBuffer> ib;
 public:
 	Mesh() = default;
-	Mesh(VertexData& vertexData);
+	Mesh(const VertexData& vertexData);
 	size_t Count();
 	unsigned int GetId() const;
 	bool UseIndexBuffer() const;

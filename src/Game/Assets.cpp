@@ -1,4 +1,5 @@
 #include "Assets.h"
+#include "Core/Primitives.h"
 #include "Renderer/Vertex.h"
 
 std::unordered_map<std::string, std::unique_ptr<Mesh>> Assets::meshes;
@@ -19,8 +20,16 @@ void Assets::Init() {
         .AddProgram("assets/shaders/Basic2D.frag", ShaderType::FRAGMENT)
         .AddProgram("assets/shaders/Basic2D.vert", ShaderType::VERTEX)
         .Build();
-    Material basic(GetShader("Shader2D"));
-    AddMaterial("Basic2D", basic);
+    AddMaterial("Basic2D", Material(GetShader("Shader2D")));
+
+    AddShader("Shader3D")
+        .AddProgram("assets/shaders/Basic3D.frag", ShaderType::FRAGMENT)
+        .AddProgram("assets/shaders/Basic3D.vert", ShaderType::VERTEX)
+        .Build();
+    AddMaterial("Basic3D", Material(GetShader("Shader3D")));
+
+    AddMesh("Plane", Primitives::CreatePlane());
+    AddMesh("Cube", Primitives::CreateCube());
 }
 
 void Assets::Close() {

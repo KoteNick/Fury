@@ -137,6 +137,7 @@
     <ClInclude Include="src\Core\Entity.h" />
     <ClInclude Include="src\Core\Core.h" />
     <ClInclude Include="src\Core\KeyCodes.h" />
+    <ClInclude Include="src\Core\Primitives.h" />
     <ClInclude Include="src\Game\Assets.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Renderer\Mesh.h" />
@@ -455,6 +456,8 @@
   <ItemGroup>
     <None Include="assets\shaders\Basic2D.frag" />
     <None Include="assets\shaders\Basic2D.vert" />
+    <None Include="assets\shaders\Basic3D.frag" />
+    <None Include="assets\shaders\Basic3D.vert" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
     <None Include="src\vendor\glm\detail\func_exponential.inl" />
@@ -600,6 +603,7 @@
     <ClCompile Include="src\Core\Input.cpp" />
     <ClCompile Include="src\Core\Component.cpp" />
     <ClCompile Include="src\Core\Entity.cpp" />
+    <ClCompile Include="src\Core\Primitives.cpp" />
     <ClCompile Include="src\Game\Assets.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Renderer\Mesh.cpp" />

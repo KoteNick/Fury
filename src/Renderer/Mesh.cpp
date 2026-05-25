@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-Mesh::Mesh(VertexData& vertexData)
+Mesh::Mesh(const VertexData& vertexData)
 {
 	va = std::make_unique<VertexArray>();
 

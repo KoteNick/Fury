@@ -47,7 +47,10 @@ struct TransformComponent : Component {
     glm::vec3 GetRight() const;
     glm::vec3 GetUp() const;
 
-    void Move(float rightOffset, float upOffset, float forwardOffset);
+    void Move(const glm::vec3& offset);
+    void Rotate(const glm::vec3& rotation);
+
+    void OnUpdate(float deltaTime) override;
 
     std::unique_ptr<Component> Clone() const override;
 };

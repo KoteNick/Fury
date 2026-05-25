@@ -25,6 +25,10 @@ void Game::Init() {
         .AddComponent(TransformComponent(-0.5, 0.0, 0.0))
         .AddComponent(RenderableComponent(Assets::GetMesh("Triangle"), Assets::GetMaterial("Basic2D")));
 
+    cube
+        .AddComponent(TransformComponent(0, 0, 0))
+        .AddComponent(RenderableComponent(Assets::GetMesh("Cube"), Assets::GetMaterial("Basic3D")));
+
     triangle2 = triangle;
     triangle2.GetComponent<TransformComponent>()->pos.z = 1;
     triangle2.GetComponent<TransformComponent>()->rot = { 0.2, 0.5, 0.7 };
@@ -33,7 +37,6 @@ void Game::Init() {
 }
 
 void Game::OnUpdate(float deltaTime) {
-    auto camTransform = camera.GetComponent<TransformComponent>();
     float speed = 5.0f * deltaTime;
 
     if (!ImGui::GetIO().WantCaptureKeyboard) {
@@ -47,19 +50,19 @@ void Game::OnUpdate(float deltaTime) {
         if (Input::IsKeyPressed(Key::Space)) camera.Transform()->pos.y += speed;
         if (Input::IsKeyPressed(Key::C)) camera.Transform()->pos.y -= speed;
 
-        camera.Transform()->Move(move.x, 0, move.z);
+        camera.Transform()->Move(move);
     }
 
     if (Input::IsMouseDown(MouseButton::Right) && !ImGui::GetIO().WantCaptureMouse) {
         glm::vec2 delta = Input::GetMouseDelta();
 
-        float sensitivity = 0.05f;
+        float sensitivity = 0.25f;
 
-        camTransform->rot.y -= delta.x * sensitivity;
-        camTransform->rot.x -= delta.y * sensitivity;
+        camera.Transform()->rot.y -= delta.x * sensitivity;
+        camera.Transform()->rot.x -= delta.y * sensitivity;
 
-        if (camTransform->rot.x > 90.f)  camTransform->rot.x = 90.f;
-        if (camTransform->rot.x < -90.f) camTransform->rot.x = -90.f;
+        if (camera.Transform()->rot.x > 90.f)  camera.Transform()->rot.x = 90.f;
+        if (camera.Transform()->rot.x < -90.f) camera.Transform()->rot.x = -90.f;
 
         float scroll = Input::GetScrollDelta();
         if (scroll != 0.0f) {
@@ -70,15 +73,17 @@ void Game::OnUpdate(float deltaTime) {
     camera.GetComponent<CameraComponent>()->Submit();
     triangle2.GetComponent<RenderableComponent>()->Submit();
     triangle.GetComponent<RenderableComponent>()->Submit();
+    cube.GetComponent<RenderableComponent>()->Submit();
 
-    auto tr = triangle.GetComponent<TransformComponent>();
+    auto tr = cube.Transform();
     if (tr->pos.x >= 1.5)
         tr->pos.x = -1.5;
     tr->pos.x += 1 * deltaTime;
     tr->rot += glm::vec3(45) * deltaTime;
 
     ImGui::Begin("Test");
-    ImGui::DragFloat3("Camera pos: ", &camera.Transform()->pos.x);
+    ImGui::DragFloat3("Camera pos", &camera.Transform()->pos.x);
+    ImGui::DragFloat3("Camera rot", &camera.Transform()->rot.x);
     ImGui::End();
 
     Renderer::Get().Flush();

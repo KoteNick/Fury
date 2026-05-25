@@ -17,7 +17,7 @@ public:
         return nullptr;
     }
 
-    static Mesh& AddMesh(const std::string& name, VertexData& vertexData) {
+    static Mesh& AddMesh(const std::string& name, const VertexData& vertexData) {
         meshes[name] = std::make_unique<Mesh>(vertexData);
         return *meshes[name];
     }

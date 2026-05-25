@@ -110,7 +110,7 @@ int main(void)
         //glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 
         glEnable(GL_BLEND);
-        //glEnable(GL_DEPTH_TEST);
+        glEnable(GL_DEPTH_TEST);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         Input::Init(window);

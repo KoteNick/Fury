@@ -19,7 +19,7 @@ public:
 public:
 	float time = 0;
 	WindowSize windowSize = {};
-	Entity triangle, triangle2, camera;
+	Entity triangle, triangle2, camera, cube;
 
 	void Init();
 	void OnUpdate(float deltaTime);
