@@ -81,3 +81,15 @@ struct CameraComponent : Component {
     std::unique_ptr<Component> Clone() const override;
 
 };
+
+struct LightSourceComponent : Component {
+    glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+    float intensity = 1.0f;
+    float radius = 10.f;
+    LightType type = LightType::Point;
+
+    LightSourceComponent() = default;
+
+    std::unique_ptr<Component> Clone() const override;
+    
+};

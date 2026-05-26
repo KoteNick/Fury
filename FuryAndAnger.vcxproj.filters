@@ -1401,6 +1401,8 @@
     <None Include="assets\shaders\Basic2D.vert" />
     <None Include="assets\shaders\Basic3D.frag" />
     <None Include="assets\shaders\Basic3D.vert" />
+    <None Include="assets\shaders\blinn_phong.frag" />
+    <None Include="assets\shaders\blinn_phong.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\vendor\glm\detail\glm.cpp">

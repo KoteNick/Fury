@@ -63,17 +63,26 @@ std::unique_ptr<Component> TransformComponent::Clone() const
 }
 
 void CameraComponent::Submit() {
-    glm::mat4 view, proj, VP;
+    CameraUBOData data;
+    glm::mat4 view, proj;
     proj = glm::perspective(glm::radians(fov), aspect, nearClip, farClip);
-    if (TransformComponent* tc = parent->GetComponent<TransformComponent>())
+    if (TransformComponent* tc = parent->GetComponent<TransformComponent>()) {
         view = glm::inverse(tc->GetModelMatrix());
-    else
+        data.viewPos = glm::vec4(tc->pos, 0);
+    }
+    else {
         view = glm::mat4(1.0f);
-    VP = proj * view;
-    Renderer::Get().SetUBO(UBOslot::Camera, VP);
+    }
+    data.projectionView = proj * view;
+    Renderer::Get().SetUBO(UBOslot::Camera, data);
 }
 
 std::unique_ptr<Component> CameraComponent::Clone() const
 {
     return std::make_unique<CameraComponent>(*this);
+}
+
+std::unique_ptr<Component> LightSourceComponent::Clone() const
+{
+    return std::make_unique<LightSourceComponent>(*this);
 }

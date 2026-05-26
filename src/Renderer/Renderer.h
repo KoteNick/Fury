@@ -18,8 +18,17 @@ void GLClearError();
 
 bool GLLogCall(const char* function, const char* file, int line);
 
+enum class LightType { Point, Directional };
+
 enum class UBOslot : unsigned int {
-    Camera = 0,
+    Camera = 0, // Expected to be CameraUBOData
+    Ambient = 1, // Expected to be vec4
+    Lights = 2, // Expected to be LightsUBOData
+};
+
+struct CameraUBOData {
+    glm::mat4 projectionView;
+    glm::vec4 viewPos = glm::vec4(0);
 };
 
 struct RenderCall
@@ -29,6 +38,19 @@ struct RenderCall
     glm::mat4 model;
 };
 
+struct PointLightData {
+    glm::vec4 positionRadius; // x,y,z - pos, w - radius
+    glm::vec4 colorIntensity; // r,g,b - color, a(w) - intensity
+};
+
+#define MAX_LIGHTS 8
+
+struct LightsUBOData
+{
+    int count;
+    int padding[3];
+    PointLightData lights[MAX_LIGHTS] = {};
+};
 
 class Renderer {
 private:
@@ -55,9 +77,10 @@ public:
     void Clear() const;
 
 
-    void AddUBO(unsigned int slot, unsigned int size);
-    void AddUBO(UBOslot slot, unsigned int size) {
+    Renderer& AddUBO(unsigned int slot, unsigned int size);
+    Renderer& AddUBO(UBOslot slot, unsigned int size) {
         AddUBO(static_cast<unsigned int>(slot), size);
+        return *this;
     };
 
     template<typename T>

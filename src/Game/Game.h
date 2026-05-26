@@ -19,7 +19,8 @@ public:
 public:
 	float time = 0;
 	WindowSize windowSize = {};
-	Entity triangle, triangle2, camera, cube;
+	Entity triangle, triangle2, camera, cube, plane, sphere, light;
+	glm::vec4 ambient;
 
 	void Init();
 	void OnUpdate(float deltaTime);

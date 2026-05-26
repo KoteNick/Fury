@@ -15,10 +15,12 @@ bool GLLogCall(const char* function, const char* file, int line)
     return true;
 }
 
-void Renderer::AddUBO(unsigned int slot, unsigned int size)
+Renderer& Renderer::AddUBO(unsigned int slot, unsigned int size)
 {
     uniformBuffers[slot] = std::make_unique<UniformBuffer>(size, slot);
     idUBO = uniformBuffers[slot]->GetID();
+
+    return *this;
 }
 
 void Renderer::Submit(RenderCall& call)

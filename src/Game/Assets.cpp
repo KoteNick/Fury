@@ -28,8 +28,15 @@ void Assets::Init() {
         .Build();
     AddMaterial("Basic3D", Material(GetShader("Shader3D")));
 
+    AddShader("blinn_phong")
+        .AddProgram("assets/shaders/blinn_phong.frag", ShaderType::FRAGMENT)
+        .AddProgram("assets/shaders/blinn_phong.vert", ShaderType::VERTEX)
+        .Build();
+    AddMaterial("light3d", Material(GetShader("blinn_phong")));
+
     AddMesh("Plane", Primitives::CreatePlane());
     AddMesh("Cube", Primitives::CreateCube());
+    AddMesh("Sphere", Primitives::CreateSphere());
 }
 
 void Assets::Close() {
