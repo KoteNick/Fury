@@ -34,6 +34,10 @@ void Assets::Init() {
         .Build();
     AddMaterial("light3d", Material(GetShader("blinn_phong")));
 
+    AddShader("shadow_map")
+        .AddProgram("assets/shaders/shadow_map.vert", ShaderType::VERTEX)
+        .Build();
+
     AddMesh("Plane", Primitives::CreatePlane());
     AddMesh("Cube", Primitives::CreateCube());
     AddMesh("Sphere", Primitives::CreateSphere());

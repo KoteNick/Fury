@@ -1,19 +1,23 @@
 #pragma once
+#include "RendererTypes.h"
 #include <string>
+#include <array>
+
+static std::array<unsigned int, Config::MAX_TEXTURE_SLOTS> s_BoundTextures = { 0 };
 
 class Texture
 {
 private:
-	unsigned int m_RendererID;
-	std::string m_fp;
-	unsigned char* m_LocalBuffer;
-	int m_Width, m_Height, m_BPP;
+	unsigned int m_RendererID = 0;
+	unsigned char* m_LocalBuffer = nullptr;
+	int m_Width, m_Height;
 public:
 	Texture(const std::string& path);
+	Texture(unsigned int glId, int w, int h) : m_RendererID(glId), m_Width(w), m_Height(h) {};
 	~Texture();
 
 	unsigned int GetId() const;
-	void Bind(unsigned int slot = 0) const;
+	void Bind(TextureSlot slot) const;
 	void Unbind() const;
 
 	inline int GetWidth() const{ return m_Width; };

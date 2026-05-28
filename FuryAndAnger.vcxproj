@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Core\Input.h" />
     <ClInclude Include="src\Core\Component.h" />
     <ClInclude Include="src\Core\Entity.h" />
@@ -144,6 +145,7 @@
     <ClInclude Include="src\Renderer\Material.h" />
     <ClInclude Include="src\Renderer\IndexBuffer.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
+    <ClInclude Include="src\Renderer\RendererTypes.h" />
     <ClInclude Include="src\Renderer\Shader.h" />
     <ClInclude Include="src\Renderer\Texture.h" />
     <ClInclude Include="src\Renderer\Vertex.h" />
@@ -457,9 +459,11 @@
     <None Include="assets\shaders\Basic2D.frag" />
     <None Include="assets\shaders\Basic2D.vert" />
     <None Include="assets\shaders\Basic3D.frag" />
+    <None Include="assets\shaders\NormalDebug3D.frag" />
     <None Include="assets\shaders\Basic3D.vert" />
     <None Include="assets\shaders\blinn_phong.frag" />
     <None Include="assets\shaders\blinn_phong.vert" />
+    <None Include="assets\shaders\shadow_map.vert" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
     <None Include="src\vendor\glm\detail\func_exponential.inl" />
@@ -602,6 +606,7 @@
     <None Include="src\vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\Core\Input.cpp" />
     <ClCompile Include="src\Core\Component.cpp" />
     <ClCompile Include="src\Core\Entity.cpp" />

@@ -4,8 +4,9 @@
 #include "stb_image/stb_image.h"
 
 Texture::Texture(const std::string& path) : 
-	m_LocalBuffer(nullptr), m_fp(path), m_Width(0), m_Height(0), m_BPP(0)
+	m_LocalBuffer(nullptr), m_Width(0), m_Height(0)
 {
+	int m_BPP = 0;
 	stbi_set_flip_vertically_on_load(true);
 	m_LocalBuffer = stbi_load(path.c_str(), &m_Width, &m_Height, &m_BPP, 4);
 	if (m_LocalBuffer) {
@@ -33,10 +34,17 @@ unsigned int Texture::GetId() const {
 	return m_RendererID;
 }
 
-void Texture::Bind(unsigned int slot) const
+void Texture::Bind(TextureSlot slot) const
 {
-	glActiveTexture(GL_TEXTURE0 + slot);
-	glBindTexture(GL_TEXTURE_2D, m_RendererID);
+	int slotIndex = static_cast<int>(slot);
+
+	if (s_BoundTextures[slotIndex] != m_RendererID)
+	{
+		glActiveTexture(GL_TEXTURE0 + slotIndex);
+		glBindTexture(GL_TEXTURE_2D, m_RendererID);
+
+		s_BoundTextures[slotIndex] = m_RendererID;
+	}
 }
 
 void Texture::Unbind() const

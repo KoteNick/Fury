@@ -3,6 +3,7 @@
 in vec3 v_FragPos;
 in vec3 v_Normal;
 in vec2 v_TexCoord;
+in vec4 v_FragPosLightSpace;
 
 out vec4 FragColor;
 
@@ -29,6 +30,35 @@ layout(std140, binding = 0) uniform CameraUBO {
 
 uniform vec4 u_Color;
 uniform float u_Shininess;
+uniform sampler2D u_ShadowMap;
+
+float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
+{
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+
+    projCoords = projCoords * 0.5 + 0.5;
+
+    if(projCoords.z > 1.0) return 0.0;
+
+    float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);
+
+    float currentDepth = projCoords.z;
+
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(u_ShadowMap, 0);
+    
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(u_ShadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += currentDepth - bias > pcfDepth  ? 1.0 : 0.0;        
+        }    
+    }
+    shadow /= 9.0;
+    
+    return shadow;
+}
 
 vec3 CalculateLight(LightData light, vec3 normal, vec3 viewDir)
 {
@@ -40,21 +70,22 @@ vec3 CalculateLight(LightData light, vec3 normal, vec3 viewDir)
 
     vec3 lightDir;
     float attenuation = 1.0;
+    float shadow = 0.0;
 
     if (radius < 0.0) 
     {
         lightDir = normalize(-lightPosOrDir);
-        attenuation = 1.0;
+        attenuation = 1.0; 
+        
+        shadow = ShadowCalculation(v_FragPosLightSpace, normal, lightDir);
     } 
     else 
     {
         lightDir = lightPosOrDir - v_FragPos;
         float distance = length(lightDir);
-        
         if (distance > radius) return vec3(0.0);
         
         lightDir = normalize(lightDir);
-
         attenuation = clamp(1.0 - (distance * distance) / (radius * radius), 0.0, 1.0);
         attenuation *= attenuation; 
     }
@@ -66,7 +97,7 @@ vec3 CalculateLight(LightData light, vec3 normal, vec3 viewDir)
     float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
     vec3 specular = 0.5 * spec * lightColor;
 
-    return (diffuse + specular) * attenuation * intensity;
+    return (1.0 - shadow) * (diffuse + specular) * attenuation * intensity;
 }
 
 void main()

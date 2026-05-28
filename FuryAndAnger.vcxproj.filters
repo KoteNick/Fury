@@ -975,6 +975,12 @@
     <ClInclude Include="src\Core\Primitives.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\FrameBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\RendererTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1399,10 +1405,12 @@
     </None>
     <None Include="assets\shaders\Basic2D.frag" />
     <None Include="assets\shaders\Basic2D.vert" />
-    <None Include="assets\shaders\Basic3D.frag" />
+    <None Include="assets\shaders\NormalDebug3D.frag" />
     <None Include="assets\shaders\Basic3D.vert" />
     <None Include="assets\shaders\blinn_phong.frag" />
     <None Include="assets\shaders\blinn_phong.vert" />
+    <None Include="assets\shaders\shadow_map.vert" />
+    <None Include="assets\shaders\Basic3D.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\vendor\glm\detail\glm.cpp">
@@ -1481,6 +1489,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Primitives.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\FrameBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

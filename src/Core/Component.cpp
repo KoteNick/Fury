@@ -50,6 +50,20 @@ void TransformComponent::Rotate(const glm::vec3& rotation)
     rot += rotation;
 }
 
+void TransformComponent::LookAt(const glm::vec3& target)
+{
+    glm::vec3 direction = glm::normalize(target - pos);
+
+    float pitch = asin(direction.y);
+
+    float yaw = atan2(-direction.x, -direction.z);
+
+    rot.x = glm::degrees(pitch);
+    rot.y = glm::degrees(yaw);
+
+    rot.z = 0.0f;
+}
+
 void TransformComponent::OnUpdate(float deltaTime)
 {
     rot.x = std::fmod(rot.x, 360.0f);
@@ -82,7 +96,32 @@ std::unique_ptr<Component> CameraComponent::Clone() const
     return std::make_unique<CameraComponent>(*this);
 }
 
-std::unique_ptr<Component> LightSourceComponent::Clone() const
+LightData PointLightComponent::GetLightData()
 {
-    return std::make_unique<LightSourceComponent>(*this);
+    return { glm::vec4(parent->Transform()->pos, radius), glm::vec4(color, intensity) };
+}
+
+std::unique_ptr<Component> PointLightComponent::Clone() const
+{
+    return std::make_unique<PointLightComponent>(*this);
+}
+
+LightData DirectionalLightComponent::GetLightData()
+{
+    return { glm::vec4(parent->Transform()->GetForward(), -1.f), glm::vec4(color, intensity)};
+}
+
+glm::mat4 DirectionalLightComponent::GetLightSpaceMatrix(glm::vec3 target)
+{
+    if (TransformComponent* tc = parent->GetComponent<TransformComponent>())
+        return 
+            glm::ortho(-orthoSize, orthoSize, -orthoSize, orthoSize, nearPlane, farPlane)
+            * 
+            glm::lookAt(tc->pos, target, tc->GetUp());
+    return glm::mat4();
+}
+
+std::unique_ptr<Component> DirectionalLightComponent::Clone() const
+{
+    return std::make_unique<DirectionalLightComponent>();
 }

@@ -42,9 +42,15 @@ void Game::Init() {
 
     light
         .AddComponent(TransformComponent(0, 3, 0))
-        .AddComponent(LightSourceComponent())
-        .AddComponent(RenderableComponent(Assets::GetMesh("Sphere"), Assets::GetMaterial("Basic3D")));;
+        .AddComponent(PointLightComponent())
+        .AddComponent(RenderableComponent(Assets::GetMesh("Sphere"), Assets::GetMaterial("Basic3D")));
     light.Transform()->scale = glm::vec3(0.1);
+
+    sun
+        .AddComponent(TransformComponent(5, 3, 0))
+        .AddComponent(DirectionalLightComponent())
+        .AddComponent(RenderableComponent(Assets::GetMesh("Sphere"), Assets::GetMaterial("Basic3D")));
+    sun.GetComponent<RenderableComponent>()->material.uniform<glm::vec4>("u_Color") = { 1.0, 0.87, 0.13, 1. };
 
     triangle2 = triangle;
     triangle2.GetComponent<TransformComponent>()->pos.z = 1;
@@ -52,22 +58,35 @@ void Game::Init() {
 
     triangle.GetComponent<RenderableComponent>()->material.uniform<glm::vec4>("u_Color") = glm::vec4(1, 0, 1, 0.5);
 
+    sphere.GetComponent<RenderableComponent>()->material.uniform<float>("u_Shininess") = 128;
+
     ambient = { 0.05f, 0.05f, 0.1f, 1.0f };
 }
 
 void Game::OnUpdate(float deltaTime) {
+    Renderer::Get().SetViewport(windowSize.width, windowSize.height);
     Renderer::Get().SetUBO(UBOslot::Ambient, ambient);
+    camera.GetComponent<CameraComponent>()->aspect = static_cast<float>(windowSize.width) / windowSize.height;
 
-    light.Transform()->pos = { 0, 3, 0 };
-    light.Transform()->rot.y += 45 * deltaTime;
-    light.Transform()->Move({3, 0, 0});
-    light.Transform()->OnUpdate(deltaTime);
+    static float orbitTime = 0.0f;
+    orbitTime += deltaTime * 0.5f;
+
+    float radius = 6.0f;
+    float height = 5.0f;
+
+    glm::vec3 newPos;
+    newPos.x = cos(orbitTime) * radius;
+    newPos.y = height;
+    newPos.z = sin(orbitTime) * radius;
+
+    sun.Transform()->pos = newPos;
+    sun.Transform()->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+    sun.Transform()->OnUpdate(deltaTime);
 
     LightsUBOData lightData;
     lightData.count = 1;
-    //lightData.lights[0].positionRadius = glm::vec4(light.Transform()->GetForward(), -1.0f);
-    lightData.lights[0].positionRadius = glm::vec4(light.Transform()->pos, light.GetComponent<LightSourceComponent>()->radius);
-    lightData.lights[0].colorIntensity = glm::vec4(light.GetComponent<LightSourceComponent>()->color, light.GetComponent<LightSourceComponent>()->intensity);
+    //lightData.lights[0] = light.GetComponent<PointLightComponent>()->GetLightData();
+    lightData.lights[0] = sun.GetComponent<DirectionalLightComponent>()->GetLightData();
     Renderer::Get().SetUBO(UBOslot::Lights, lightData);
 
     float speed = 5.0f * deltaTime;
@@ -110,6 +129,7 @@ void Game::OnUpdate(float deltaTime) {
     plane.GetComponent<RenderableComponent>()->Submit();
     sphere.GetComponent<RenderableComponent>()->Submit();
     light.GetComponent<RenderableComponent>()->Submit();
+    sun.GetComponent<RenderableComponent>()->Submit();
 
     auto tr = cube.Transform();
     if (tr->pos.x >= 1.5)
@@ -122,9 +142,10 @@ void Game::OnUpdate(float deltaTime) {
     ImGui::DragFloat3("Camera rot", &camera.Transform()->rot.x);
     ImGui::DragFloat3("LightPos", &light.Transform()->pos.x, 0.1);
     ImGui::ColorPicker3("AmbientColor", &ambient.r);
+    ImGui::ColorPicker3("LightColor", &sun.GetComponent<DirectionalLightComponent>()->color.x);
     ImGui::End();
 
-    Renderer::Get().Flush();
+    Renderer::Get().Flush(Assets::GetShader("shadow_map"), sun.GetComponent<DirectionalLightComponent>()->GetLightSpaceMatrix());
 }
 
 void Game::Close()

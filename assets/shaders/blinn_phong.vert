@@ -7,6 +7,7 @@ layout(location = 2) in vec2 a_TexCoord;
 out vec3 v_FragPos;
 out vec3 v_Normal;
 out vec2 v_TexCoord;
+out vec4 v_FragPosLightSpace;
 
 layout(std140, binding = 0) uniform CameraUBO {
     mat4 u_ProjectionView;
@@ -14,6 +15,7 @@ layout(std140, binding = 0) uniform CameraUBO {
 };
 
 uniform mat4 u_Model;
+uniform mat4 u_LightSpaceMatrix;
 
 void main()
 {
@@ -23,6 +25,8 @@ void main()
     v_Normal = mat3(u_Model) * a_Normal;  
 
     v_TexCoord = a_TexCoord;
+
+    v_FragPosLightSpace = u_LightSpaceMatrix * worldPos;
     
     gl_Position = u_ProjectionView * worldPos;
 }

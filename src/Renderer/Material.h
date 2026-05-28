@@ -3,17 +3,19 @@
 #include "Texture.h"
 
 #include <unordered_map>
+#include <array>
 
 class Material
 {
 	bool isDirty = true;
-
 public:
+	std::array<Texture*, Config::MAX_LOCAL_TEXTURES> textures = { nullptr };
+
 	Shader* shader = nullptr;
-	std::vector<Texture*> textures;
 	Material() = default;
 	Material(Shader* shader);
 
+	Material& AddTexture(Texture* texture, TextureSlot slot = TextureSlot::Diffuse);
 	void Bind();
 	void ApplyUniforms();
 

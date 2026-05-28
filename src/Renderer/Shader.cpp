@@ -43,6 +43,12 @@ void Shader::SetUniform1i(const std::string& name, int v)
         glUniform1i(location, v);
 }
 
+void Shader::SetUniformSampler2D(const std::string& name, TextureSlot slot)
+{
+    if (int location = GetUniformLocation(name, GL_SAMPLER_2D); location != -1)
+        glUniform1i(location, static_cast<int>(slot));
+}
+
 void Shader::SetUniform1f(const std::string& name, float v)
 {
     if (int location = GetUniformLocation(name, GL_FLOAT); location != -1)

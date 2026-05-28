@@ -19,7 +19,7 @@ public:
 public:
 	float time = 0;
 	WindowSize windowSize = {};
-	Entity triangle, triangle2, camera, cube, plane, sphere, light;
+	Entity triangle, triangle2, camera, cube, plane, sphere, light, sun;
 	glm::vec4 ambient;
 
 	void Init();

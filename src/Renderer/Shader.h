@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include "glm/glm.hpp"
 
+#include "RendererTypes.h"
+
 enum class ShaderType {
 	NONE = -1, VERTEX = GL_VERTEX_SHADER, FRAGMENT = GL_FRAGMENT_SHADER
 };
@@ -23,7 +25,6 @@ public:
 private:
 	bool wasCompiled;
 	unsigned int m_RendererID;
-	std::string m_fp;
 	std::unordered_map<std::string, UniformInfo> m_uniLocCache;
 public:
 	Shader();
@@ -36,6 +37,7 @@ public:
 	void Unbind() const;
 
 	void SetUniform1i(const std::string& name, int v);
+	void SetUniformSampler2D(const std::string& name, TextureSlot slot);
 	void SetUniform1f(const std::string& name, float v);
 	void SetUniform1iv(const std::string& name, unsigned int count, int* v);
 	void SetUniform3f(const std::string& name, float v0, float v1, float v2);

@@ -121,17 +121,16 @@ int main(void)
 
         game->Init();
 
+        Renderer::Get().shadowBuffer = std::make_unique<FrameBuffer>(2048, 2048);
+
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {
             glfwGetWindowSize(window, &game->windowSize.width, &game->windowSize.height);
-            glViewport(0, 0, game->windowSize.width, game->windowSize.height);
 
             float currentTime = (float)glfwGetTime();
             float deltaTime = currentTime - game->time;
             game->time = currentTime;
-
-            Renderer::Get().Clear();
 
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();

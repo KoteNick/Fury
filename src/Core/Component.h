@@ -49,6 +49,7 @@ struct TransformComponent : Component {
 
     void Move(const glm::vec3& offset);
     void Rotate(const glm::vec3& rotation);
+    void LookAt(const glm::vec3& target);
 
     void OnUpdate(float deltaTime) override;
 
@@ -82,14 +83,33 @@ struct CameraComponent : Component {
 
 };
 
-struct LightSourceComponent : Component {
+struct PointLightComponent : Component {
     glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
     float intensity = 1.0f;
     float radius = 10.f;
-    LightType type = LightType::Point;
 
-    LightSourceComponent() = default;
+    bool castsShadow = false;
+
+    PointLightComponent() = default;
+
+    LightData GetLightData();
 
     std::unique_ptr<Component> Clone() const override;
-    
+};
+
+struct DirectionalLightComponent : Component {
+    glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
+    float intensity = 1.0f;
+    bool castsShadows = true;
+
+    float orthoSize = 10.0f;
+    float nearPlane = 1.0f;
+    float farPlane = 30.0f;
+
+    DirectionalLightComponent() = default;
+
+    LightData GetLightData();
+    glm::mat4 GetLightSpaceMatrix(glm::vec3 target = glm::vec3(0));
+
+    std::unique_ptr<Component> Clone() const override;
 };
