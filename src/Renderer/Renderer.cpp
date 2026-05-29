@@ -78,7 +78,7 @@ void Renderer::Flush(class Shader* shadowShader, const glm::mat4& lightSpaceMatr
             r.mesh->Bind();
         }
 
-        if (shadowBuffer) {
+        if (shadowBuffer && r.material->shader->HasUniform("u_ShadowMap")) {
             r.material->shader->SetUniformSampler2D("u_ShadowMap", TextureSlot::ShadowMap);
             r.material->shader->SetUniformMat4f("u_LightSpaceMatrix", lightSpaceMatrix);
         }

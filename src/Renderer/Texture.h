@@ -3,7 +3,6 @@
 #include <string>
 #include <array>
 
-static std::array<unsigned int, Config::MAX_TEXTURE_SLOTS> s_BoundTextures = { 0 };
 
 class Texture
 {

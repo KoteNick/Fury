@@ -8,13 +8,17 @@ class Entity
 {
 	std::unordered_map<int, std::unique_ptr<Component>> components;
 public:
+	std::string name;
 
 	Entity() = default;
+	Entity(const std::string& name) : name(name) {};
 
 	Entity(const Entity& other);
 
 	// MAKES A COPY!!!
 	Entity& operator=(const Entity& other);
+
+	void Update(float deltaTime);
 
 	template <typename T>
 	Entity& AddComponent(T component) {

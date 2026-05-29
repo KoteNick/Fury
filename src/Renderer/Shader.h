@@ -35,6 +35,7 @@ public:
 	unsigned int GetId() const;
 	void Bind() const;
 	void Unbind() const;
+	bool HasUniform(const std::string& name);
 
 	void SetUniform1i(const std::string& name, int v);
 	void SetUniformSampler2D(const std::string& name, TextureSlot slot);

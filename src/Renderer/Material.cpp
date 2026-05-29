@@ -3,7 +3,8 @@
 Material::Material(Shader* shader) : shader(shader)
 {
 	vec4s["u_Color"] = glm::vec4(1.0);
-	floats["u_Shininess"] = 64.f;
+	if (shader->HasUniform("u_Shininess"))
+		floats["u_Shininess"] = 64.f;
 }
 
 Material& Material::AddTexture(Texture* texture, TextureSlot slot)

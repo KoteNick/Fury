@@ -132,6 +132,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\BaseScene.h" />
+    <ClInclude Include="src\Game\Scenes\Scenes.h" />
+    <ClInclude Include="src\Game\Scenes\TestScene.h" />
     <ClInclude Include="src\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Core\Input.h" />
     <ClInclude Include="src\Core\Component.h" />
@@ -606,6 +609,8 @@
     <None Include="src\vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\BaseScene.cpp" />
+    <ClCompile Include="src\Game\Scenes\TestScene.cpp" />
     <ClCompile Include="src\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\Core\Input.cpp" />
     <ClCompile Include="src\Core\Component.cpp" />

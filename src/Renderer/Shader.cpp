@@ -37,6 +37,14 @@ void Shader::Unbind() const
     glUseProgram(0);
 }
 
+bool Shader::HasUniform(const std::string& name)
+{
+    auto it = m_uniLocCache.find(name);
+    if (it != m_uniLocCache.end())
+        return true;
+    return false;
+}
+
 void Shader::SetUniform1i(const std::string& name, int v)
 {
     if (int location = GetUniformLocation(name, GL_INT); location != -1)

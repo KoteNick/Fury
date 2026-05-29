@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include "stb_image/stb_image.h"
 
+static std::array<unsigned int, Config::MAX_TEXTURE_SLOTS> s_BoundTextures = { 0 };
+
 Texture::Texture(const std::string& path) : 
 	m_LocalBuffer(nullptr), m_Width(0), m_Height(0)
 {

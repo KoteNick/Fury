@@ -19,3 +19,11 @@ Entity& Entity::operator=(const Entity& other)
 	}
 	return *this;
 }
+
+void Entity::Update(float deltaTime)
+{
+	for (auto& [id, component] : components)
+	{
+		component->OnUpdate(deltaTime);
+	}
+}

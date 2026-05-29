@@ -39,6 +39,7 @@ void Assets::Init() {
         .Build();
 
     AddMesh("Plane", Primitives::CreatePlane());
+    AddMesh("Plane100", Primitives::CreatePlane(100, 100, 100, 100));
     AddMesh("Cube", Primitives::CreateCube());
     AddMesh("Sphere", Primitives::CreateSphere());
 }

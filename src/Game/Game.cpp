@@ -10,6 +10,7 @@
 #include "Core/Input.h"
 
 Game* Game::instance = nullptr;
+static bool wireframeMode = false;
 
 void Game::Init() {
     Renderer::Get()
@@ -33,8 +34,8 @@ void Game::Init() {
 
     plane
         .AddComponent(TransformComponent(0, -2, 0))
-        .AddComponent(RenderableComponent(Assets::GetMesh("Plane"), Assets::GetMaterial("light3d")));
-    plane.Transform()->scale *= 10;
+        .AddComponent(RenderableComponent(Assets::GetMesh("Plane100"), Assets::GetMaterial("light3d")));
+    //plane.Transform()->scale *= 10;
 
     sphere
         .AddComponent(TransformComponent(0, 2, -1))
@@ -59,8 +60,6 @@ void Game::Init() {
     triangle.GetComponent<RenderableComponent>()->material.uniform<glm::vec4>("u_Color") = glm::vec4(1, 0, 1, 0.5);
 
     sphere.GetComponent<RenderableComponent>()->material.uniform<float>("u_Shininess") = 128;
-
-    ambient = { 0.05f, 0.05f, 0.1f, 1.0f };
 }
 
 void Game::OnUpdate(float deltaTime) {
@@ -84,8 +83,8 @@ void Game::OnUpdate(float deltaTime) {
     sun.Transform()->OnUpdate(deltaTime);
 
     LightsUBOData lightData;
-    lightData.count = 1;
-    //lightData.lights[0] = light.GetComponent<PointLightComponent>()->GetLightData();
+    lightData.count = 2;
+    lightData.lights[1] = light.GetComponent<PointLightComponent>()->GetLightData();
     lightData.lights[0] = sun.GetComponent<DirectionalLightComponent>()->GetLightData();
     Renderer::Get().SetUBO(UBOslot::Lights, lightData);
 
@@ -93,6 +92,8 @@ void Game::OnUpdate(float deltaTime) {
 
     if (!ImGui::GetIO().WantCaptureKeyboard) {
         glm::vec3 move(0);
+
+        if (Input::IsKeyPressed(Key::LeftShift)) speed = 10.f * deltaTime;
 
         if (Input::IsKeyPressed(Key::W)) move.z += speed;
         if (Input::IsKeyPressed(Key::S)) move.z -= speed;
@@ -138,6 +139,15 @@ void Game::OnUpdate(float deltaTime) {
     tr->rot += glm::vec3(45) * deltaTime;
 
     ImGui::Begin("Test");
+    if (ImGui::Checkbox("Wireframe Mode", &wireframeMode))
+    {
+        if (wireframeMode) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        }
+        else {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
+    }
     ImGui::DragFloat3("Camera pos", &camera.Transform()->pos.x);
     ImGui::DragFloat3("Camera rot", &camera.Transform()->rot.x);
     ImGui::DragFloat3("LightPos", &light.Transform()->pos.x, 0.1);
