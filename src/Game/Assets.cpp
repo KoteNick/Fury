@@ -38,8 +38,28 @@ void Assets::Init() {
         .AddProgram("assets/shaders/shadow_map.vert", ShaderType::VERTEX)
         .Build();
 
+    AddShader("plains")
+        .AddProgram("assets/shaders/plains.vert", ShaderType::VERTEX)
+        .AddProgram("assets/shaders/plains.frag", ShaderType::FRAGMENT)
+        .Build();
+    AddMaterial("plains", Material(GetShader("plains")));
+
+    AddShader("terrain")
+        .AddProgram("assets/shaders/terrain.vert", ShaderType::VERTEX)
+        .AddProgram("assets/shaders/terrain.frag", ShaderType::FRAGMENT)
+        .Build();
+    AddMaterial("terrain", Material(GetShader("terrain")));
+
+    AddShader("sky")
+        .AddProgram("assets/shaders/sky.vert", ShaderType::VERTEX)
+        .AddProgram("assets/shaders/sky.frag", ShaderType::FRAGMENT)
+        .Build();
+    AddMaterial("sky", Material(GetShader("sky")));
+
     AddMesh("Plane", Primitives::CreatePlane());
     AddMesh("Plane100", Primitives::CreatePlane(100, 100, 100, 100));
+    AddMesh("Plane100500", Primitives::CreatePlane(100, 100, 500, 500));
+    AddMesh("Plane50500", Primitives::CreatePlane(100, 100, 500, 500));
     AddMesh("Cube", Primitives::CreateCube());
     AddMesh("Sphere", Primitives::CreateSphere());
 }

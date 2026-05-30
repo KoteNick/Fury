@@ -65,7 +65,7 @@ public:
     std::unique_ptr<FrameBuffer> shadowBuffer;
     glm::vec2 viewport;
     
-    void Submit(RenderCall& call);
+    void Submit(const RenderCall& call);
     void Flush(class Shader* shadowShader = nullptr, const glm::mat4& lightSpaceMatrix = glm::mat4(1.0f));
     void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
     void Draw(RenderCall call);

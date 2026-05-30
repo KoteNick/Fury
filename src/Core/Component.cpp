@@ -4,8 +4,7 @@
 void RenderableComponent::Submit()
 {
     if (TransformComponent* tc = parent->GetComponent<TransformComponent>()) {
-        RenderCall call = { mesh, &material, tc->GetModelMatrix() };
-        Renderer::Get().Submit(call);
+        Renderer::Get().Submit({ mesh, &material, tc->GetModelMatrix() });
     }
 }
 

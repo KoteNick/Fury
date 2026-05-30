@@ -122,6 +122,8 @@ int main(void)
         game->Init();
 
         Renderer::Get().shadowBuffer = std::make_unique<FrameBuffer>(2048, 2048);
+        glfwWindowHint(GLFW_SAMPLES, 4);
+        glEnable(GL_MULTISAMPLE);
 
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))

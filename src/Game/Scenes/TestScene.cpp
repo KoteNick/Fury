@@ -66,12 +66,6 @@ void TestScene::OnUpdate(float deltaTime)
     sun.Transform()->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
     sun.Transform()->OnUpdate(deltaTime);
 
-    LightsUBOData lightData;
-    lightData.count = 2;
-    lightData.lights[1] = light.GetComponent<PointLightComponent>()->GetLightData();
-    lightData.lights[0] = sun.GetComponent<DirectionalLightComponent>()->GetLightData();
-    Renderer::Get().SetUBO(UBOslot::Lights, lightData);
-
     float speed = 5.0f * deltaTime;
 
     if (!ImGui::GetIO().WantCaptureKeyboard) {

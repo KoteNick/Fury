@@ -15,7 +15,7 @@ public:
 	Material() = default;
 	Material(Shader* shader);
 
-	Material& AddTexture(Texture* texture, TextureSlot slot = TextureSlot::Diffuse);
+	Material& AddTexture(Texture* texture, TextureSlot slot);
 	void Bind();
 	void ApplyUniforms();
 

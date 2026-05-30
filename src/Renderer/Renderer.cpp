@@ -23,7 +23,7 @@ Renderer& Renderer::AddUBO(unsigned int slot, unsigned int size)
     return *this;
 }
 
-void Renderer::Submit(RenderCall& call)
+void Renderer::Submit(const RenderCall& call)
 {
     renderQueue.push_back(call);
 }
@@ -72,6 +72,8 @@ void Renderer::Flush(class Shader* shadowShader, const glm::mat4& lightSpaceMatr
             idShader = r.material->shader->GetId();
             r.material->shader->Bind();
         }
+
+        r.material->Bind();
 
         if (idMesh != r.mesh->GetId()) {
             idMesh = r.mesh->GetId();

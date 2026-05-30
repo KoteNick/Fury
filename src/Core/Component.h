@@ -72,7 +72,7 @@ struct CameraComponent : Component {
     float fov = 45.0f;
     float aspect = 16.0f / 9.0f;
     float nearClip = 0.1f;
-    float farClip = 100.0f;
+    float farClip = 500.0f;
 
     CameraComponent() = default;
     CameraComponent(float fov, float aspect, float nearClip, float farClip): fov(fov), aspect(aspect), nearClip(nearClip), farClip(farClip) {};

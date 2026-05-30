@@ -20,7 +20,7 @@ void Game::Init() {
 
     Assets::Init();
 
-    currentScene = new TestScene();
+    currentScene = new TerrainScene();
     currentScene->Init();
 }
 

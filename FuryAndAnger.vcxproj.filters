@@ -990,6 +990,15 @@
     <ClInclude Include="src\Game\Scenes\TestScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\vendor\FastNoiseLite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Scenes\FieldScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Scenes\TerrainScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1420,6 +1429,12 @@
     <None Include="assets\shaders\blinn_phong.vert" />
     <None Include="assets\shaders\shadow_map.vert" />
     <None Include="assets\shaders\Basic3D.frag" />
+    <None Include="assets\shaders\plains.frag" />
+    <None Include="assets\shaders\plains.vert" />
+    <None Include="assets\shaders\terrain.frag" />
+    <None Include="assets\shaders\terrain.vert" />
+    <None Include="assets\shaders\sky.frag" />
+    <None Include="assets\shaders\sky.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\vendor\glm\detail\glm.cpp">
@@ -1507,6 +1522,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\Scenes\TestScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Scenes\FieldScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Scenes\TerrainScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,6 +2,7 @@
 #include "RendererTypes.h"
 #include <string>
 #include <array>
+#include <GL/glew.h>
 
 
 class Texture
@@ -13,6 +14,7 @@ private:
 public:
 	Texture(const std::string& path);
 	Texture(unsigned int glId, int w, int h) : m_RendererID(glId), m_Width(w), m_Height(h) {};
+	Texture(int width, int height, unsigned char* data, GLenum internalFormat = GL_RGBA8, GLenum format = GL_RGBA);
 	~Texture();
 
 	unsigned int GetId() const;

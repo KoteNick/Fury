@@ -2,7 +2,8 @@
 
 Material::Material(Shader* shader) : shader(shader)
 {
-	vec4s["u_Color"] = glm::vec4(1.0);
+	if (shader->HasUniform("u_Color"))
+		vec4s["u_Color"] = glm::vec4(1.0);
 	if (shader->HasUniform("u_Shininess"))
 		floats["u_Shininess"] = 64.f;
 }

@@ -2,3 +2,5 @@
 // You should include all your custom scenes here
 
 #include "TestScene.h"
+#include "FieldScene.h"
+#include "TerrainScene.h"

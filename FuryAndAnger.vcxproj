@@ -132,8 +132,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Scenes\FieldScene.h" />
     <ClInclude Include="src\Game\BaseScene.h" />
     <ClInclude Include="src\Game\Scenes\Scenes.h" />
+    <ClInclude Include="src\Game\Scenes\TerrainScene.h" />
     <ClInclude Include="src\Game\Scenes\TestScene.h" />
     <ClInclude Include="src\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Core\Input.h" />
@@ -155,6 +157,7 @@
     <ClInclude Include="src\Renderer\VertexArray.h" />
     <ClInclude Include="src\Renderer\VertexBuffer.h" />
     <ClInclude Include="src\Renderer\VertexBufferLayout.h" />
+    <ClInclude Include="src\vendor\FastNoiseLite.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_vector_decl.hpp" />
@@ -467,6 +470,12 @@
     <None Include="assets\shaders\blinn_phong.frag" />
     <None Include="assets\shaders\blinn_phong.vert" />
     <None Include="assets\shaders\shadow_map.vert" />
+    <None Include="assets\shaders\plains.frag" />
+    <None Include="assets\shaders\plains.vert" />
+    <None Include="assets\shaders\sky.frag" />
+    <None Include="assets\shaders\sky.vert" />
+    <None Include="assets\shaders\terrain.frag" />
+    <None Include="assets\shaders\terrain.vert" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
     <None Include="src\vendor\glm\detail\func_exponential.inl" />
@@ -609,7 +618,9 @@
     <None Include="src\vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Scenes\FieldScene.cpp" />
     <ClCompile Include="src\Game\BaseScene.cpp" />
+    <ClCompile Include="src\Game\Scenes\TerrainScene.cpp" />
     <ClCompile Include="src\Game\Scenes\TestScene.cpp" />
     <ClCompile Include="src\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\Core\Input.cpp" />
