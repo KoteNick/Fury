@@ -2,7 +2,6 @@
 #include "Renderer/Renderer.h"
 
 #include <memory>
-#include <glm/ext/matrix_transform.hpp>
 
 class Entity;
 
@@ -112,6 +111,19 @@ struct DirectionalLightComponent : Component {
     glm::vec3 GetDirection() const;
     glm::mat4 GetLightSpaceMatrix(glm::vec3 target = glm::vec3(0)) const;
     SunUBOData GetSunUBO(unsigned int size = 2) const;
+
+    std::unique_ptr<Component> Clone() const override;
+};
+
+struct LevelOfDetailComponent : Component {
+    std::vector<std::pair<float, Mesh*>> LODs = { {0, nullptr} };
+    Entity* camera;
+
+    LevelOfDetailComponent(Entity* camera = nullptr) : camera(camera) {};
+
+    void OnUpdate(float deltaTime) override;
+
+    LevelOfDetailComponent& AddLOD(float distance, Mesh* mesh);
 
     std::unique_ptr<Component> Clone() const override;
 };

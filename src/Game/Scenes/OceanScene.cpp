@@ -4,36 +4,47 @@ void OceanScene::Init()
 {
     oceanData = {};
 
-	Renderer::Get().AddUBO(UBOslot::Slot8, sizeof(OceanUBOData));
+    Renderer::Get().AddUBO(UBOslot::Slot8, sizeof(OceanUBOData));
 
     camera = &CreateEntity("camera")
         .AddComponent(TransformComponent())
         .AddComponent(CameraComponent());
 
-	CreateEntity("Ocean")
-		.AddComponent(TransformComponent())
-		.AddComponent(RenderableComponent(Assets::GetMesh("Plane100500"), Assets::GetMaterial("ocean")));
+    int size = 9;
+    float start = -100 * (size / 2);
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            auto& En = CreateEntity("Ocean")
+                .AddComponent(TransformComponent(start + 100 * j, 0, start + 100 * i))
+                .AddComponent(RenderableComponent(Assets::GetMesh("Plane100500"), Assets::GetMaterial("ocean")))
+                .AddComponent(LevelOfDetailComponent(camera)
+                    .AddLOD(50, Assets::GetMesh("Plane100250"))
+                    .AddLOD(100, Assets::GetMesh("Plane100")));
+        }
+    }
+	
 
     sun = &CreateEntity("Sun")
         .AddComponent(TransformComponent(0.0f, 50.0f, -100.0f))
         .AddComponent(DirectionalLightComponent());;
 
-    /*CreateEntity("Light")
-        .AddComponent(TransformComponent(0, 3, 0))
+    CreateEntity("Light")
+        .AddComponent(TransformComponent(20, 3, 0))
         .AddComponent(PointLightComponent())
         .AddComponent(RenderableComponent(Assets::GetMesh("Sphere"), Assets::GetMaterial("Basic3D")))
-        .Transform()->scale *= 0.5;*/
+        .Transform()->scale *= 0.5;
 
     sky = &CreateEntity("Sky")
         .AddComponent(TransformComponent())
         .AddComponent(RenderableComponent(Assets::GetMesh("Sphere"), Assets::GetMaterial("sky")));
-    sky->Transform()->scale *= 500;
+    sky->Transform()->scale *= 1000;
 }
 
 void OceanScene::OnUpdate(float deltaTime)
 {
     UpdateEntities(deltaTime);
 
+    sky->Transform()->pos = camera->Transform()->pos;
     sun->Transform()->LookAt({ 0,0,0 });
     SunUBOData sunData = sun->GetComponent<DirectionalLightComponent>()->GetSunUBO(sunSize);
     Renderer::Get().SetUBO(UBOslot::Sun, sunData);
@@ -83,7 +94,7 @@ void OceanScene::OnUpdate(float deltaTime)
     }
 
     if (ImGui::CollapsingHeader("Wave Geometry", ImGuiTreeNodeFlags_DefaultOpen)) {
-        ImGui::SliderInt("Octaves (Quality)", &oceanData.WaveCount, 1, 32);
+        ImGui::SliderInt("Octaves (Quality)", &oceanData.WaveCount, 1, 16);
         ImGui::SliderFloat("Global Height", &oceanData.Height, 0.0f, 5.0f);
         ImGui::SliderFloat("Global Speed", &oceanData.InitialSpeed, 0.0f, 10.0f);
 
@@ -104,6 +115,7 @@ void OceanScene::OnUpdate(float deltaTime)
         ImGui::SliderFloat("Fresnel Power", &oceanData.FresnelShininess, 1.0f, 20.0f);
         ImGui::SliderFloat("Foam Attenuation", &oceanData.TipAttenuation, 1.0f, 20.0f);
         ImGui::SliderFloat("Normal Strength", &oceanData.NormalStrength, 0.0f, 2.0f);
+        ImGui::SliderFloat("Glint Size", &glint, 0.2, 1);
     }
 
     if (ImGui::CollapsingHeader("Athmosphere")) {
@@ -119,6 +131,7 @@ void OceanScene::OnUpdate(float deltaTime)
     ImGui::End();
 
     GetEntity("Ocean")->GetComponent<RenderableComponent>()->material.uniform<float>("u_Time") = time;
+    GetEntity("Ocean")->GetComponent<RenderableComponent>()->material.uniform<float>("u_GlintSize") = glint;
     Renderer::Get().SetUBO(UBOslot::Slot8, oceanData);
 
     time += deltaTime;

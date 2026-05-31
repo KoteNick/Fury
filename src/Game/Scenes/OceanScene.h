@@ -36,7 +36,7 @@ struct OceanUBOData {
 
 class OceanScene : public BaseScene {
 public:
-    float time = 0;
+    float time = 0, glint = 0.5f;
     OceanUBOData oceanData;
     Entity *sky, *sun;
     int sunSize = 2;

@@ -64,6 +64,7 @@ void Assets::Init() {
 
     AddMesh("Plane", Primitives::CreatePlane());
     AddMesh("Plane100", Primitives::CreatePlane(100, 100, 100, 100));
+    AddMesh("Plane100250", Primitives::CreatePlane(100, 100, 250, 250));
     AddMesh("Plane100500", Primitives::CreatePlane(100, 100, 500, 500));
     AddMesh("Plane50500", Primitives::CreatePlane(100, 100, 500, 500));
     AddMesh("Plane200x600", Primitives::CreatePlane(200, 200, 600, 600));

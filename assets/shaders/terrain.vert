@@ -1,6 +1,6 @@
 #version 450
 
-layout(std140, binding = 0) uniform CameraUBO {
+layout(std140) uniform CameraUBO {
     mat4 u_ProjectionView;
     vec4 u_ViewPos;
 };

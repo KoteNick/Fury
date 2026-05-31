@@ -23,6 +23,7 @@ layout (std140) uniform LightsUBO {
 };
 
 uniform float u_Time;
+uniform float u_GlintSize;
 
 layout(std140, binding = 8) uniform OceanUBO {
     vec4 u_Ambient; vec4 u_DiffuseReflectance; vec4 u_SpecularReflectance;
@@ -87,7 +88,15 @@ void main() {
     vec3 sunDiffuse = u_SunLightColor.rgb * sunNdotL * sunIntensity * (u_DiffuseReflectance.rgb / 3.14159);
     
     vec3 halfwayDir = normalize(sunDir + viewDir);
-    float specPower = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
+    float NdotH = max(dot(normal, halfwayDir), 0.0);
+
+    float sunSize = clamp(u_SunDiskColorAndSize.w, 0.001, 0.9999);
+    
+    float physicalShininess = log(u_GlintSize) / log(sunSize);
+    
+    float finalShininess = min(physicalShininess, u_Shininess);
+    
+    float specPower = pow(NdotH, finalShininess);
     vec3 sunSpecular = u_SunSpecColor.rgb * specPower * sunIntensity * u_SpecularReflectance.rgb;
 
     vec3 localDiffuse = vec3(0.0);

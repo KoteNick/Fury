@@ -1,6 +1,9 @@
 #include "Component.h"
 #include "Entity.h"
 
+#include <glm/ext/matrix_transform.hpp>
+#include <algorithm>
+
 void RenderableComponent::Submit()
 {
     if (TransformComponent* tc = parent->GetComponent<TransformComponent>()) {
@@ -140,4 +143,49 @@ SunUBOData DirectionalLightComponent::GetSunUBO(unsigned int size) const
 std::unique_ptr<Component> DirectionalLightComponent::Clone() const
 {
     return std::make_unique<DirectionalLightComponent>();
+}
+
+void LevelOfDetailComponent::OnUpdate(float deltaTime)
+{
+    auto myTransform = parent->GetComponent<TransformComponent>();
+    auto camTransform = camera->GetComponent<TransformComponent>();
+    auto renderable = parent->GetComponent<RenderableComponent>();
+
+    if (!myTransform || !camTransform || !renderable) return;
+
+
+    if (LODs[0].second == nullptr) {
+        LODs[0].second = renderable->mesh;
+    }
+
+    glm::vec3 diff = myTransform->pos - camTransform->pos;
+    float distSq = glm::dot(diff, diff);
+
+    Mesh* targetMesh = LODs[0].second;
+
+    for (int i = (int)LODs.size() - 1; i >= 0; --i) {
+        float lodDist = LODs[i].first;
+        if (distSq >= (lodDist * lodDist)) {
+            targetMesh = LODs[i].second;
+            break;
+        }
+    }
+
+    if (renderable->mesh != targetMesh) {
+        renderable->mesh = targetMesh;
+    }
+}
+
+LevelOfDetailComponent& LevelOfDetailComponent::AddLOD(float distance, Mesh* mesh)
+{
+    LODs.push_back({ distance, mesh });
+    std::sort(LODs.begin(), LODs.end(), [](const auto& a, const auto& b) {
+        return a.first < b.first;
+        });
+    return *this;
+}
+
+std::unique_ptr<Component> LevelOfDetailComponent::Clone() const
+{
+    return std::make_unique<LevelOfDetailComponent>();
 }
