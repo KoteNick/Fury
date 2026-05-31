@@ -16,10 +16,12 @@ void Game::Init() {
     Renderer::Get()
         .AddUBO(UBOslot::Camera, sizeof(CameraUBOData))
         .AddUBO(UBOslot::Ambient, sizeof(glm::vec4))
-        .AddUBO(UBOslot::Lights, sizeof(LightsUBOData));
+        .AddUBO(UBOslot::Lights, sizeof(LightsUBOData))
+        .AddUBO(UBOslot::Sun, sizeof(SunUBOData));
 
     Assets::Init();
 
+    //currentScene = new OceanScene();
     currentScene = new TerrainScene();
     currentScene->Init();
 }

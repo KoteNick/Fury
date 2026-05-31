@@ -97,6 +97,7 @@ Shader& Shader::Build() {
     glLinkProgram(m_RendererID);
     glValidateProgram(m_RendererID);
     CacheActiveUniforms();
+    BindUniformBuffers();
     wasCompiled = true;
     return *this;
 }
@@ -172,6 +173,21 @@ void Shader::AttachCompiledShader(ShaderType type, const std::string& source)
     glDeleteShader(id);
 }
 
+void Shader::BindUniformBuffers()
+{
+    for (UBOslot slot : Config::STANDART_UBO_SLOTS) {
+        const char* blockName = ToString(slot);
+
+        if (blockName[0] == '\0') continue;
+
+        GLuint blockIndex = glGetUniformBlockIndex(m_RendererID, blockName);
+
+        if (blockIndex != GL_INVALID_INDEX) {
+            glUniformBlockBinding(m_RendererID, blockIndex, static_cast<GLuint>(slot));
+        }
+    }
+}
+
 void Shader::CacheActiveUniforms()
 {
     int count;
@@ -188,7 +204,9 @@ void Shader::CacheActiveUniforms()
 
         int location = glGetUniformLocation(m_RendererID, name);
 
-        m_uniLocCache[std::string(name)] = { location, type };
+        if (location != -1) {
+            m_uniLocCache[std::string(name)] = { location, type };
+        }
     }
 }
 

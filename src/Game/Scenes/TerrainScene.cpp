@@ -3,6 +3,8 @@
 void TerrainScene::Init()
 {
     terrainSettings = {};
+    sunData = {};
+    sunData.DiskColorAndSize.w = 0.995;
 
     camera = &CreateEntity("camera")
         .AddComponent(TransformComponent(0, 1, 3))
@@ -10,30 +12,31 @@ void TerrainScene::Init()
 
     auto& terr = CreateEntity("terrain")
         .AddComponent(TransformComponent(0, 0, 0))
-        .AddComponent(RenderableComponent(Assets::GetMesh("Plane100500"), Assets::GetMaterial("terrain")));
+        .AddComponent(RenderableComponent(Assets::GetMesh("Plane200x600"), Assets::GetMaterial("terrain")));
 
-    Renderer::Get().AddUBO(UBOslot::Custom1, sizeof(TerrainUBOData));
+    Renderer::Get().AddUBO(UBOslot::Slot8, sizeof(TerrainUBOData));
 
     sky = &CreateEntity("Sky")
         .AddComponent(TransformComponent())
         .AddComponent(RenderableComponent(Assets::GetMesh("Sphere"), Assets::GetMaterial("sky")));
-    sky->Transform()->scale *= -500;
+    sky->Transform()->scale *= 500;
 }
 
 void TerrainScene::OnUpdate(float deltaTime)
 {
     UpdateEntities(deltaTime);
 
-    Renderer::Get().SetUBO(UBOslot::Custom1, terrainSettings);
+    Renderer::Get().SetUBO(UBOslot::Sun, sunData);
+    Renderer::Get().SetUBO(UBOslot::Slot8, terrainSettings);
 
     GetEntity("Sky")->Transform()->pos = camera->Transform()->pos;
 
-    float speed = 15.0f * deltaTime;
+    float speed = 25.0f * deltaTime;
 
     if (!ImGui::GetIO().WantCaptureKeyboard) {
         glm::vec3 move(0);
 
-        if (Input::IsKeyPressed(Key::LeftShift)) speed = 10.f * deltaTime;
+        if (Input::IsKeyPressed(Key::LeftShift)) speed = 50.f * deltaTime;
 
         if (Input::IsKeyPressed(Key::W)) move.z += speed;
         if (Input::IsKeyPressed(Key::S)) move.z -= speed;
@@ -94,12 +97,11 @@ void TerrainScene::OnUpdate(float deltaTime)
         ImGui::SliderFloat2("Slope Threshold", &terrainSettings.SlopeRange[0], 0.0f, 1.0f);
         ImGui::SliderFloat("Slope Damping", &terrainSettings.SlopeDamping, 0.01f, 1.0f);
     }
-    //terrainSettings.LightDirection = GetEntity("Sun")->Transform()->GetForward();
+
     if (ImGui::CollapsingHeader("Lighting")) {
-        ImGui::SliderFloat3("Light Dir", &terrainSettings.LightDirection[0], -1.0f, 1.0f);
+        ImGui::SliderFloat3("Light Dir", &sunData.DirectionIntensity[0], -1.0f, 1.0f);
         ImGui::ColorEdit3("Ambient", &terrainSettings.AmbientLight[0]);
     }
-    sky->GetComponent<RenderableComponent>()->material.uniform<glm::vec3>("u_LightDir") = -terrainSettings.LightDirection;
 
     ImGui::End();
 }

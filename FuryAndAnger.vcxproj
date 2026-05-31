@@ -134,6 +134,7 @@
   <ItemGroup>
     <ClInclude Include="src\Game\Scenes\FieldScene.h" />
     <ClInclude Include="src\Game\BaseScene.h" />
+    <ClInclude Include="src\Game\Scenes\OceanScene.h" />
     <ClInclude Include="src\Game\Scenes\Scenes.h" />
     <ClInclude Include="src\Game\Scenes\TerrainScene.h" />
     <ClInclude Include="src\Game\Scenes\TestScene.h" />
@@ -469,6 +470,8 @@
     <None Include="assets\shaders\Basic3D.vert" />
     <None Include="assets\shaders\blinn_phong.frag" />
     <None Include="assets\shaders\blinn_phong.vert" />
+    <None Include="assets\shaders\ocean.frag" />
+    <None Include="assets\shaders\ocean.vert" />
     <None Include="assets\shaders\shadow_map.vert" />
     <None Include="assets\shaders\plains.frag" />
     <None Include="assets\shaders\plains.vert" />
@@ -620,6 +623,7 @@
   <ItemGroup>
     <ClCompile Include="src\Game\Scenes\FieldScene.cpp" />
     <ClCompile Include="src\Game\BaseScene.cpp" />
+    <ClCompile Include="src\Game\Scenes\OceanScene.cpp" />
     <ClCompile Include="src\Game\Scenes\TerrainScene.cpp" />
     <ClCompile Include="src\Game\Scenes\TestScene.cpp" />
     <ClCompile Include="src\Renderer\FrameBuffer.cpp" />

@@ -999,6 +999,9 @@
     <ClInclude Include="src\Game\Scenes\TerrainScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\Scenes\OceanScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1435,6 +1438,8 @@
     <None Include="assets\shaders\terrain.vert" />
     <None Include="assets\shaders\sky.frag" />
     <None Include="assets\shaders\sky.vert" />
+    <None Include="assets\shaders\ocean.frag" />
+    <None Include="assets\shaders\ocean.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\vendor\glm\detail\glm.cpp">
@@ -1528,6 +1533,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\Scenes\TerrainScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Scenes\OceanScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

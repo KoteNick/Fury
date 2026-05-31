@@ -32,12 +32,29 @@ inline constexpr const char* ToString(TextureSlot slot)
 }
 
 enum class UBOslot : unsigned int {
-	Camera = 0, // Expected to be CameraUBOData
-	Ambient = 1, // Expected to be vec4
-	Lights = 2, // Expected to be LightsUBOData
+	Camera = 0,		// Expected to be CameraUBOData
+	Ambient = 1,	// Expected to be vec4
+	Lights = 2,		// Expected to be LightsUBOData
+	Sun = 3,		// Expected to be SunUBOData
 
-	Custom1 = 8,  // Expected to be whatever you decide
-	Custom2 = 9,  // Expected to be whatever you decide
-	Custom3 = 10, // Expected to be whatever you decide
-	Custom4 = 11, // Expected to be whatever you decide
+	Slot8 = 8,		// Expected to be whatever you decide
+	Slot9 = 9,		// Expected to be whatever you decide
+	Slot10 = 10,	// Expected to be whatever you decide
+	Slot11 = 11,	// Expected to be whatever you decide
 };
+inline constexpr const char* ToString(UBOslot slot)
+{
+	switch (slot) {
+	case UBOslot::Camera:  return "CameraUBO";
+	case UBOslot::Ambient: return "AmbientUBO";
+	case UBOslot::Lights:  return "LightsUBO";
+	case UBOslot::Sun:     return "SunUBO";
+
+	default: return "";
+	}
+};
+namespace Config {
+	inline constexpr UBOslot STANDART_UBO_SLOTS[] = {
+		UBOslot::Camera, UBOslot::Ambient, UBOslot::Lights, UBOslot::Sun,
+	};
+}
