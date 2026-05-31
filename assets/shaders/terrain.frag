@@ -4,30 +4,40 @@ layout(std140, binding = 0) uniform CameraUBO {
     mat4 u_ProjectionView;
     vec4 u_ViewPos;
 };
+layout(std140) uniform SunUBO {
+    vec4 u_SunDirInt;
+    vec4 u_SunDiskColorAndSize;
+    vec4 u_SunLightColor;
+    vec4 u_SunSpecColor;
+};
 uniform mat4 u_Model;
 
 // This is the uniform buffer that contains all of the settings we sent over from the cpu in _render_callback. Must match with the one in the vertex shader, they're technically the same thing occupying the same spot in memory this is just duplicate code required for compilation.
 layout(set = 0, binding = 8, std140) uniform UniformBufferObject {
-	vec3 _LightDirection;
-	float _GradientRotation;
-	float _NoiseRotation;
-	float _TerrainHeight;
-	vec2 _AngularVariance;
-	float _Scale;
-	float _Octaves;
-	float _AmplitudeDecay;
-	float _NormalStrength;
-	vec3 _Offset;
-	float _Seed;
-	float _InitialAmplitude;
-	float _Lacunarity;
-	vec2 _SlopeRange;
-	vec4 _LowSlopeColor;
-	vec4 _HighSlopeColor;
-	float _FrequencyVarianceLowerBound;
-	float _FrequencyVarianceUpperBound;
-	float _SlopeDamping;
-	vec4 _AmbientLight;
+    vec4 _LowSlopeColor;
+    vec4 _HighSlopeColor;
+    vec4 _AmbientLight;
+    
+    vec3 _Offset;
+    float _Seed;
+    
+    vec2 _AngularVariance;
+    vec2 _SlopeRange;
+    
+    float _GradientRotation;
+    float _NoiseRotation;
+    float _TerrainHeight;
+    float _Scale;
+    
+    float _Octaves;
+    float _AmplitudeDecay;
+    float _NormalStrength;
+    float _InitialAmplitude;
+    
+    float _Lacunarity;
+    float _FrequencyVarianceLowerBound;
+    float _FrequencyVarianceUpperBound;
+    float _SlopeDamping;
 };
 
 // These are the variables that we expect to receive from the vertex shader
@@ -198,7 +208,7 @@ void main() {
 	vec3 normal = normalize(blended_derivative);
 
 	// Lambertian diffuse, negative dot product values clamped off because negative light doesn't exist
-	float ndotl = clamp(dot(_LightDirection, normal), 0, 1);
+	float ndotl = clamp(dot(-u_SunDirInt.xyz, normal), 0, 1);
 
 	// Direct light cares about the diffuse result, ambient light does not
 	vec4 direct_light = albedo * ndotl;

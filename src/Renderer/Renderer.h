@@ -38,6 +38,20 @@ struct LightData {
     glm::vec4 colorIntensity; // r,g,b - color, a(w) - intensity
 };
 
+struct SunUBOData {
+    // x,y,z = Direction, w = Intensity
+    glm::vec4 DirectionIntensity = { 0.5f, -0.5f, 0.5f, 1.0f };
+
+    // x,y,z = Red, Green, Blue, w = Sun Size
+    glm::vec4 DiskColorAndSize = { 1, 1, 1, 0.995 };
+
+    // x,y,z = Light RGB, w = 1.0
+    glm::vec4 LightColor = glm::vec4(1.0);
+
+    // x,y,z = Specular RGB, w = 1.0
+    glm::vec4 SpecularColor = glm::vec4(1.0);
+};
+
 struct LightsUBOData
 {
     int count = 0;
@@ -51,7 +65,7 @@ private:
     ~Renderer() {}
 private:
     unsigned int idMesh = 0, idTex = 0, idShader = 0, idUBO = 0;
-    std::unordered_map<unsigned int, std::unique_ptr<UniformBuffer>> uniformBuffers;
+    std::unordered_map<UBOslot, std::unique_ptr<UniformBuffer>> uniformBuffers;
 public:
     static Renderer& Get() {
         static Renderer instance;
@@ -73,14 +87,10 @@ public:
     void Clear() const;
 
 
-    Renderer& AddUBO(unsigned int slot, unsigned int size);
-    Renderer& AddUBO(UBOslot slot, unsigned int size) {
-        AddUBO(static_cast<unsigned int>(slot), size);
-        return *this;
-    };
+    Renderer& AddUBO(UBOslot slot, unsigned int size);
 
     template<typename T>
-    void SetUBO(unsigned int slot, const T& data, unsigned int offset = 0) {
+    void SetUBO(UBOslot slot, const T& data, unsigned int offset = 0) {
         auto it = uniformBuffers.find(slot);
 
         if (it != uniformBuffers.end()) {
@@ -90,10 +100,6 @@ public:
             }
             it->second->SetData(static_cast<const void*>(&data), sizeof(T), offset);
         }
-    }
-    template<typename T>
-    void SetUBO(UBOslot slot, const T& data, unsigned int offset = 0) {
-        SetUBO(static_cast<unsigned int>(slot), data, offset);
     }
 
 };

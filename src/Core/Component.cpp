@@ -105,12 +105,17 @@ std::unique_ptr<Component> PointLightComponent::Clone() const
     return std::make_unique<PointLightComponent>(*this);
 }
 
-LightData DirectionalLightComponent::GetLightData()
+LightData DirectionalLightComponent::GetLightData() const
 {
     return { glm::vec4(parent->Transform()->GetForward(), -1.f), glm::vec4(color, intensity)};
 }
 
-glm::mat4 DirectionalLightComponent::GetLightSpaceMatrix(glm::vec3 target)
+glm::vec3 DirectionalLightComponent::GetDirection() const
+{
+    return parent ? parent->Transform()->GetForward() : glm::vec3(0, -1, 0);
+}
+
+glm::mat4 DirectionalLightComponent::GetLightSpaceMatrix(glm::vec3 target) const
 {
     if (TransformComponent* tc = parent->GetComponent<TransformComponent>())
         return 
@@ -118,6 +123,18 @@ glm::mat4 DirectionalLightComponent::GetLightSpaceMatrix(glm::vec3 target)
             * 
             glm::lookAt(tc->pos, target, tc->GetUp());
     return glm::mat4();
+}
+
+SunUBOData DirectionalLightComponent::GetSunUBO(unsigned int size) const
+{
+    SunUBOData ubo = {};
+    float safeSize = (size == 0) ? 1.0f : (float)size;
+    float sunCosThreshold = 1.0f - 0.5f / (10.0f * safeSize);
+    ubo.DirectionIntensity = glm::vec4(GetDirection(), intensity);
+    ubo.DiskColorAndSize = glm::vec4(color, sunCosThreshold); 
+    ubo.LightColor = ubo.SpecularColor = glm::vec4(color, 1.0f);
+
+    return ubo;
 }
 
 std::unique_ptr<Component> DirectionalLightComponent::Clone() const

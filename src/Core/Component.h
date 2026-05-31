@@ -108,8 +108,10 @@ struct DirectionalLightComponent : Component {
 
     DirectionalLightComponent() = default;
 
-    LightData GetLightData();
-    glm::mat4 GetLightSpaceMatrix(glm::vec3 target = glm::vec3(0));
+    LightData GetLightData() const;
+    glm::vec3 GetDirection() const;
+    glm::mat4 GetLightSpaceMatrix(glm::vec3 target = glm::vec3(0)) const;
+    SunUBOData GetSunUBO(unsigned int size = 2) const;
 
     std::unique_ptr<Component> Clone() const override;
 };

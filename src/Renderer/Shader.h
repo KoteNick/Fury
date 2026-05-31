@@ -53,6 +53,7 @@ private:
 	unsigned int CompileShader(ShaderType type, const std::string& source);
 	void AttachCompiledShader(ShaderType type, const std::string& source);
 
+	void BindUniformBuffers();
 	void CacheActiveUniforms();
 	int GetUniformLocation(const std::string& name, unsigned int dataType);
 };
