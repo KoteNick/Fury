@@ -15,6 +15,7 @@ uniform vec3 u_BottomColor = vec3(0.7, 0.8, 0.9);
 void main() {
     vec3 viewDir = normalize(v_LocalPos);
     
+    // Градиент неба
     float t = clamp(viewDir.y * 0.5 + 0.5, 0.0, 1.0);
     vec3 finalColor = mix(u_BottomColor, u_TopColor, t);
     
