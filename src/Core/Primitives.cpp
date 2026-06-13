@@ -6,6 +6,7 @@
 
 constexpr float PI = 3.14159265359f;
 
+// Creates a plane of width and depth, consisting of segmentsX and segmentZ of vertices
 VertexData Primitives::CreatePlane(float width, float depth, unsigned int segmentsX, unsigned int segmentsZ)
 {
     if (segmentsX < 1) segmentsX = 1;

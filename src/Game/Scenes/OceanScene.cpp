@@ -18,8 +18,8 @@ void OceanScene::Init()
                 .AddComponent(TransformComponent(start + 100 * j, 0, start + 100 * i))
                 .AddComponent(RenderableComponent(Assets::GetMesh("Plane100500"), Assets::GetMaterial("ocean")))
                 .AddComponent(LevelOfDetailComponent(camera)
-                    .AddLOD(50, Assets::GetMesh("Plane100250"))
-                    .AddLOD(100, Assets::GetMesh("Plane100")));
+                    .AddLOD(75, Assets::GetMesh("Plane100250"))
+                    .AddLOD(120, Assets::GetMesh("Plane100")));
         }
     }
 	

@@ -21,8 +21,7 @@ void Game::Init() {
 
     Assets::Init();
 
-    currentScene = new OceanScene();
-    //currentScene = new TerrainScene();
+    currentScene = new TestScene();
     currentScene->Init();
 }
 

@@ -78,7 +78,7 @@ void TerrainScene::OnUpdate(float deltaTime)
     if (ImGui::CollapsingHeader("Noise & FBM")) {
         ImGui::SliderFloat("Octaves", &terrainSettings.Octaves, 1.0f, 16.0f, "%.0f");
         ImGui::SliderFloat("Initial Amplitude", &terrainSettings.InitialAmplitude, 0.01f, 2.0f);
-        ImGui::SliderFloat("Amplitude Decay", &terrainSettings.AmplitudeDecay, 0.01f, 1.0f);
+        ImGui::SliderFloat("Amplitude Decay", &terrainSettings.AmplitudeDecay, 0.01f, 0.5f);
         ImGui::SliderFloat("Lacunarity", &terrainSettings.Lacunarity, 0.5f, 3.0f);
     }
 
