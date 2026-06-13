@@ -32,7 +32,6 @@ layout(std140, binding = 8) uniform OceanUBO {
 out vec3 v_FragPos;
 out vec2 v_TexCoord;
 
-// Генерация волн
 vec3 vertexFBM(vec3 v) {
     float f = u_Frequency;
     float a = u_Amplitude;

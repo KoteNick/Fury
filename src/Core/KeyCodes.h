@@ -51,6 +51,10 @@ enum class Key : uint16_t
     Y = 89,
     Z = 90,
 
+    LeftBracket = 91, // [
+    Backslash = 92, // \\ //
+    RightBracket = 93, // ]
+    GraveAccent = 96, // ~
     Escape = 256,
     Enter = 257,
     Tab = 258,
@@ -70,6 +74,19 @@ enum class Key : uint16_t
     NumLock = 282,
     PrintScreen = 283,
     Pause = 284,
+
+    F1 = 290,
+    F2 = 291,
+    F3 = 292,
+    F4 = 293,
+    F5 = 294,
+    F6 = 295,
+    F7 = 296,
+    F8 = 297,
+    F9 = 298,
+    F10 = 299,
+    F11 = 300,
+    F12 = 301,
 
     LeftShift = 340,
     LeftControl = 341,

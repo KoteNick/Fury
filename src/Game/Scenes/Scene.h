@@ -8,4 +8,5 @@ class Scene : public BaseScene {
 public:
 	void Init() override;
 	void OnUpdate(float deltaTime) override;
+	//void Destroy() override;
 };

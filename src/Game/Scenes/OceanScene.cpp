@@ -22,7 +22,6 @@ void OceanScene::Init()
                     .AddLOD(120, Assets::GetMesh("Plane100")));
         }
     }
-	
 
     sun = &CreateEntity("Sun")
         .AddComponent(TransformComponent(0.0f, 50.0f, -100.0f))
@@ -104,7 +103,6 @@ void OceanScene::OnUpdate(float deltaTime)
         ImGui::SliderFloat("Base Amplitude", &oceanData.Amplitude, 0.1f, 5.0f);
         ImGui::SliderFloat("Amp Multiplier", &oceanData.AmplitudeMult, 0.1f, 1.0f);
 
-        // Это ключевые параметры для "остроты" волн
         ImGui::SliderFloat("Max Peak (Sharpness)", &oceanData.MaxPeak, 0.1f, 3.0f);
         ImGui::SliderFloat("Peak Offset", &oceanData.PeakOffset, 0.0f, 2.0f);
         ImGui::SliderFloat("Drag (Choppiness)", &oceanData.Drag, 0.0f, 0.2f);

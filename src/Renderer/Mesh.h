@@ -37,6 +37,7 @@ public:
 	Mesh() = default;
 	Mesh(const VertexData& vertexData);
 	size_t Count();
+	size_t VertexCount();
 	unsigned int GetId() const;
 	bool UseIndexBuffer() const;
 	void Bind();

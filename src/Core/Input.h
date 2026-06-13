@@ -13,6 +13,8 @@ public:
     static void Update();
 
     static bool IsKeyPressed(Key key);
+    static bool IsKeyDown(Key key);
+    static bool IsKeyUp(Key key);
 
     static void BindAction(const std::string& action, Key key);
     static bool IsActionActive(const std::string& action);

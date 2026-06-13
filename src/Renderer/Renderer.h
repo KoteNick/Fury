@@ -26,6 +26,11 @@ struct CameraUBOData {
     glm::vec4 viewPos = glm::vec4(0);
 };
 
+struct RendererStats {
+    unsigned int drawCalls = 0;
+    unsigned int vertexCount = 0;
+};
+
 struct RenderCall
 {
     Mesh* mesh;
@@ -78,6 +83,7 @@ public:
     std::vector<RenderCall> renderQueue;
     std::unique_ptr<FrameBuffer> shadowBuffer;
     glm::vec2 viewport;
+    RendererStats rendererStats;
     
     void Submit(const RenderCall& call);
     void Flush(class Shader* shadowShader = nullptr, const glm::mat4& lightSpaceMatrix = glm::mat4(1.0f));

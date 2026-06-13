@@ -13,6 +13,7 @@ class BaseScene
 	std::deque<Entity> entities;
 	std::unordered_map<std::string, Entity*> entityCache;
 public:
+	bool debugUI;
 	Entity* camera = nullptr;
 	glm::vec3 ambient = {0.05f, 0.05f, 0.1f};
 
@@ -24,5 +25,6 @@ public:
 
 	virtual void Init();
 	virtual void OnUpdate(float deltaTime);
+	virtual void Destroy();
 };
 

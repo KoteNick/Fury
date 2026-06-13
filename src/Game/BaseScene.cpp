@@ -86,3 +86,10 @@ void BaseScene::Init() {
 void BaseScene::OnUpdate(float deltaTime) {
 	UpdateEntities(deltaTime);
 }
+
+void BaseScene::Destroy()
+{
+    entities.clear();
+    entityCache.clear();
+    camera = nullptr;
+}

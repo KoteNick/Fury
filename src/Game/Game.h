@@ -11,6 +11,7 @@ class Game {
 	};
 private:
 	static Game* instance;
+	std::unordered_map<std::string, std::unique_ptr<BaseScene>> scenes;
 	BaseScene* currentScene = nullptr;
 public:
 	Game() {
@@ -21,6 +22,7 @@ public:
 	}
 	static Game& Get() { return *instance; }
 public:
+	bool debugUI = false;
 	float time = 0;
 	WindowSize windowSize = {};
 

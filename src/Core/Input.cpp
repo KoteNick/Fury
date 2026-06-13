@@ -8,6 +8,8 @@ namespace {
     GLFWwindow* window = nullptr;
 
     std::bitset<GLFW_KEY_LAST + 1> keyStates;
+    std::bitset<GLFW_KEY_LAST + 1> keyStatesPrev;
+
     bool mouseBtnStates[GLFW_MOUSE_BUTTON_LAST + 1] = { false };
 
     std::unordered_map<std::string, std::vector<Key>> actionMap;
@@ -72,12 +74,26 @@ void Input::Update()
 
     scrollDelta = scrollAccum;
     scrollAccum = 0.0f;
+
+    keyStatesPrev = keyStates;
 }
 
 bool Input::IsKeyPressed(Key key)
 {
     int code = static_cast<int>(key);
-    return (code >= 0 && code <= GLFW_KEY_LAST) ? keyStates[code] : false;
+    return keyStates[code];
+}
+
+bool Input::IsKeyDown(Key key)
+{
+    int code = static_cast<int>(key);
+    return (!keyStatesPrev[code] && keyStates[code]);
+}
+
+bool Input::IsKeyUp(Key key)
+{
+    int code = static_cast<int>(key);
+    return (keyStatesPrev[code] && !keyStates[code]);
 }
 
 void Input::BindAction(const std::string& action, Key key)

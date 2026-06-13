@@ -30,6 +30,8 @@ void Renderer::Submit(const RenderCall& call)
 
 void Renderer::Flush(class Shader* shadowShader, const glm::mat4& lightSpaceMatrix)
 {
+    rendererStats = {};
+
     idShader = 0;
     idMesh = 0;
 
@@ -54,6 +56,7 @@ void Renderer::Flush(class Shader* shadowShader, const glm::mat4& lightSpaceMatr
                 glDrawElements(GL_TRIANGLES, r.mesh->Count(), GL_UNSIGNED_INT, nullptr);
             else
                 glDrawArrays(GL_TRIANGLES, 0, r.mesh->Count());
+            rendererStats.drawCalls++;
         }
         shadowBuffer->Unbind();
         glViewport(0, 0, viewport.x, viewport.y);
@@ -92,6 +95,8 @@ void Renderer::Flush(class Shader* shadowShader, const glm::mat4& lightSpaceMatr
             glDrawElements(GL_TRIANGLES, r.mesh->Count(), GL_UNSIGNED_INT, nullptr);
         else
             glDrawArrays(GL_TRIANGLES, 0, r.mesh->Count());
+        rendererStats.drawCalls++;
+        rendererStats.vertexCount += r.mesh->VertexCount();
     }
 
     renderQueue.clear();

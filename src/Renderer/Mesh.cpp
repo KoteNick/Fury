@@ -22,6 +22,11 @@ size_t Mesh::Count()
 		return vertexCount;
 }
 
+size_t Mesh::VertexCount()
+{
+	return vertexCount;
+}
+
 unsigned int Mesh::GetId() const
 {
 	return va->GetId();

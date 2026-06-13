@@ -10,3 +10,5 @@ void Scene::Init()
 void Scene::OnUpdate(float deltaTime)
 {
 }
+
+//void Scene::Destroy() { BaseScene::Destroy(); } // You dont need this in most cases

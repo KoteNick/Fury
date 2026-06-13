@@ -12,7 +12,7 @@ Currently supports only OpenGL.
 Its made of three parts:
 1. **Game** - Assets, Scenes and whatever else you might write, primary place to write your own code.
 2. **Core** - Input system, `Entity` class, Components - stuff that makes up the inner guts of an engine.
-3. **Renderer** - Abstractions around the raw OpenGL calls and Render Queue hadler. Probably the last thing you wanna touch
+3. **Renderer** - Abstractions around the raw OpenGL calls and Render Queue handler. Probably the last thing you wanna touch
 
 As you can see, **Fury** has a hierarchy - you can get the job done by only making/changing files in the Game folder, but if you need or want to add or change something about the engine, other parts are open to you.
 
@@ -25,8 +25,8 @@ So how do you make something with the engine?
 There are three assets **Fury** holds:
 #### Meshes
 As of right now, **Fury** cannot load models.
-However you can either make a mesh yourself (by manually writing vertex data into a vector of vertices and then creating a `MeshData` object), or use a Primitives class to generate primitves
-Meshes are static and, as of now, doesn't hold any data after loading itself on GPU, so you cannot change them. Also they are provided and stored throughout thre project as pointers.
+However you can either make a mesh yourself (by manually writing vertex data into a vector of vertices and then creating a `MeshData` object), or use a `Primitives` class to generate primitves
+Meshes are static and, as of now, doesn't hold any data after loading itself on GPU, so you cannot change them. Also they are provided and stored throughout the project as pointers.
 ```cpp
     std::vector<Vertex2D> v = {
             {+0.0, +0.5, 1.0, 1.0, 1.0},
@@ -42,7 +42,7 @@ Meshes are static and, as of now, doesn't hold any data after loading itself on 
 ```
 
 #### Shaders
-Loaded from file, provided a type and compiled. Texture slots and uniform blocks are automated, so their name must be the same as expected. See `Renderer/RendererTypes.h`
+Loaded from file, provided a type and compiled. Texture slots and uniform blocks are automated, so their name must be the same as expected. See `Renderer/RendererTypes.h`.
 Shaders are also static, so provided as pointers.
 ```cpp
     AddShader("blinn_phong")
@@ -61,10 +61,10 @@ As you can see they use the shader pointer in constructor.
 ### Making a scene
 
 Game class holds the `currentScene` pointer to a `BaseScene` class. There are two ways to make a scene.
-1. Make a `BaseScene` object and fill it up with entities in the Game.cpp or somewhere else.
+1. Make a `BaseScene` object and fill it up with entities in the `Game.cpp` or somewhere else.
 2. Make a child of `BaseScene` inside Game/Scenes folder, to make separate scenes in a cleaner way, writing the specific scene code inside of the classes. There is a `Scene.cpp` and `Scene.h` files to copy for your convenience.
 
-`BaseScene` has a `OnRender` method that automatically sends objects to a `RenderQueue`, while also making specific actions with light source objects and camera
+`BaseScene` has a `OnRender` method that automatically sends objects to a `RenderQueue`, while also making specific actions with light source objects and camera.
 `camera` is an Entity pointer in the scene that you might want to set to your camera object.
 Scenes hold entities inside, you should use `CreateEntity` and `GetEntity` methods.
 
@@ -148,4 +148,4 @@ Also `Material` class might not have all of the uniform types you might use, but
 
 You are, of course, free to do whatever you want, but to keep things organized and working well there are few recommendations:
 * Don't write GL code in other parts besides Renderer
-* Add assets with the Assets class. Either in the Assets.cpp or somewhere else (for dynamic level loading, for example)
+* Add assets with the `Assets` class. Either in the `Assets.cpp `or somewhere else (for dynamic level loading, for example)

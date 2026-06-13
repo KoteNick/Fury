@@ -21,35 +21,60 @@ void Game::Init() {
 
     Assets::Init();
 
-    currentScene = new TestScene();
-    currentScene->Init();
+    scenes["Test"] = std::make_unique<TestScene>();
+    scenes["Ocean"] = std::make_unique<OceanScene>();
+    scenes["Terrain"] = std::make_unique<TerrainScene>();
 }
 
 void Game::OnUpdate(float deltaTime) {
     Renderer::Get().SetViewport(windowSize.width, windowSize.height);
+    //Renderer::Get().Clear();
     if (currentScene) {
         if (currentScene->camera)
             currentScene->camera->GetComponent<CameraComponent>()->aspect = static_cast<float>(windowSize.width) / windowSize.height;
 
         currentScene->OnUpdate(deltaTime);
+        currentScene->debugUI = debugUI;
     }
 
-    ImGui::Begin("Test");
-    if (ImGui::Checkbox("Wireframe Mode", &wireframeMode))
-    {
-        if (wireframeMode) {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (Input::IsKeyDown(Key::GraveAccent))
+        debugUI = !debugUI;
+
+    if (debugUI) {
+        ImGui::Begin("Debug");
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        ImGui::Text("DeltaTime: %.5f seconds", deltaTime);
+        if (ImGui::Checkbox("Wireframe Mode", &wireframeMode))
+        {
+            if (wireframeMode) {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            }
+            else {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            }
         }
-        else {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+        auto stats = Renderer::Get().rendererStats;
+        ImGui::Text("Vertices on scene: %i", stats.vertexCount);
+        ImGui::Text("Draw calls: %i", stats.drawCalls);
+
+        if (ImGui::CollapsingHeader("Scenes", ImGuiTreeNodeFlags_DefaultOpen))
+        {
+            ImGui::Indent();
+
+            for (auto& v : scenes) {
+                if (ImGui::Button(v.first.c_str())) {
+                    if (currentScene) currentScene->Destroy();
+                    currentScene = v.second.get();
+                    currentScene->Init();
+                }
+            }
+
+            ImGui::Unindent();
         }
+
+        ImGui::End();
     }
-    /*ImGui::DragFloat3("Camera pos", &camera.Transform()->pos.x);
-    ImGui::DragFloat3("Camera rot", &camera.Transform()->rot.x);
-    ImGui::DragFloat3("LightPos", &light.Transform()->pos.x, 0.1);
-    ImGui::ColorPicker3("AmbientColor", &ambient.r);
-    ImGui::ColorPicker3("LightColor", &sun.GetComponent<DirectionalLightComponent>()->color.x);*/
-    ImGui::End();
 
     if (currentScene)
         currentScene->OnRender();
