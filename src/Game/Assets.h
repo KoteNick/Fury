@@ -58,6 +58,8 @@ public:
 
     static Material& AddMaterial(const std::string& name, const Material& material) {
         materials[name] = material;
+        if (material.shader->HasUniform(ToString(TextureSlot::Diffuse)))
+            materials[name].AddTexture(GetTexture("white"), TextureSlot::Diffuse);
         return materials[name];
     }
 

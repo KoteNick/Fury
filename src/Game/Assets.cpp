@@ -40,8 +40,7 @@ void Assets::Init() {
         .AddProgram("assets/shaders/blinn_phong.frag", ShaderType::FRAGMENT)
         .AddProgram("assets/shaders/blinn_phong.vert", ShaderType::VERTEX)
         .Build();
-    AddMaterial("light3d", Material(GetShader("blinn_phong")))
-        .AddTexture(GetTexture("white"), TextureSlot::Diffuse);
+    AddMaterial("light3d", Material(GetShader("blinn_phong")));
 
     AddShader("shadow_map")
         .AddProgram("assets/shaders/shadow_map.vert", ShaderType::VERTEX)
@@ -81,19 +80,21 @@ void Assets::Init() {
     AddMesh("Sphere", Primitives::CreateSphere());
 
     AddShader("planet")
-        .AddProgram("assets/shaders/planet.frag", ShaderType::FRAGMENT)
+        .AddProgram("assets/shaders/solar/planet.frag", ShaderType::FRAGMENT)
         .AddProgram("assets/shaders/blinn_phong.vert", ShaderType::VERTEX)
         .Build();
     AddMaterial("planet", Material(GetShader("planet")))
         .AddTexture(GetTexture("white"), TextureSlot::Diffuse)
         .AddTexture(GetTexture("normal"), TextureSlot::Normal)
         .AddTexture(GetTexture("black"), TextureSlot::Specular)
-        .AddTexture(GetTexture("black"), TextureSlot::Emission);
+        .AddTexture(GetTexture("black"), TextureSlot::Emission)
+        .uniform<int>("u_IsAtmosphere") = 0;
 
-    AddTexture("Earth", Texture("assets/textures/8k_earth_daymap.jpg"));
-    AddTexture("EarthNight", Texture("assets/textures/8k_earth_nightmap.jpg"));
-    AddTexture("EarthSpec", Texture("assets/textures/8k_earth_specular_map.jpg"));
-    AddTexture("EarthNormal", Texture("assets/textures/8k_earth_normal_map.jpg"));
+    AddShader("ring")
+        .AddProgram("assets/shaders/solar/ring.frag", ShaderType::FRAGMENT)
+        .AddProgram("assets/shaders/solar/ring.vert", ShaderType::VERTEX)
+        .Build();
+    AddMaterial("ring", Material(GetShader("ring")));
 }
 
 void Assets::Close() {

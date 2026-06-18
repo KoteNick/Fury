@@ -35,6 +35,9 @@ void Material::ApplyUniforms()
 	}
 
 	// Apply all uniforms from each type
+	for (auto& v : ints)
+		shader->SetUniform1i(v.first, v.second);
+
 	for (auto& v : floats)
 		shader->SetUniform1f(v.first, v.second);
 

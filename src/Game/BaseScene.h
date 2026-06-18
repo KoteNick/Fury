@@ -23,6 +23,7 @@ public:
 
 	void UpdateEntities(float deltaTime);
 	void OnRender(bool shadowPass = true);
+	void DebugCameraMovement(float deltaTime, float speed = 15.0f, float speedBoostMultiplier = 3.0f, float sensitivity = 0.25f);
 
 	virtual void Init();
 	virtual void OnUpdate(float deltaTime);

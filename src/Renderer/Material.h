@@ -25,6 +25,7 @@ public:
 private:
 
 	// Uniform types to add
+	std::unordered_map<std::string, int> ints;
 	std::unordered_map<std::string, float> floats;
 	std::unordered_map<std::string, glm::vec3> vec3s;
 	std::unordered_map<std::string, glm::vec4> vec4s;
@@ -32,6 +33,12 @@ private:
 
 
 // Uniform access functions for maps of each type
+template<>
+inline int& Material::uniform<int>(const std::string& name) {
+	isDirty = true;
+	return ints[name];
+}
+
 template<>
 inline float& Material::uniform<float>(const std::string& name) {
 	isDirty = true;

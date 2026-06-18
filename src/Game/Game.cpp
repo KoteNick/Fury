@@ -33,7 +33,7 @@ void Game::OnUpdate(float deltaTime) {
     //Renderer::Get().Clear();
     if (currentScene) {
         if (currentScene->camera)
-            currentScene->camera->GetComponent<CameraComponent>()->aspect = static_cast<float>(windowSize.width) / windowSize.height;
+            currentScene->camera->GetComponent<CameraComponent>()->aspect = static_cast<float>(windowSize.width) / static_cast<float>(windowSize.height);
 
         currentScene->OnUpdate(deltaTime);
         currentScene->debugUI = debugUI;

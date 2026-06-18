@@ -48,40 +48,7 @@ void OceanScene::OnUpdate(float deltaTime)
     SunUBOData sunData = sun->GetComponent<DirectionalLightComponent>()->GetSunUBO(sunSize);
     Renderer::Get().SetUBO(UBOslot::Sun, sunData);
 
-    float speed = 15.0f * deltaTime;
-
-    if (!ImGui::GetIO().WantCaptureKeyboard) {
-        glm::vec3 move(0);
-
-        if (Input::IsKeyPressed(Key::LeftShift)) speed = 50.f * deltaTime;
-
-        if (Input::IsKeyPressed(Key::W)) move.z += speed;
-        if (Input::IsKeyPressed(Key::S)) move.z -= speed;
-        if (Input::IsKeyPressed(Key::A)) move.x -= speed;
-        if (Input::IsKeyPressed(Key::D)) move.x += speed;
-
-        if (Input::IsKeyPressed(Key::Space)) camera->Transform()->pos.y += speed;
-        if (Input::IsKeyPressed(Key::C)) camera->Transform()->pos.y -= speed;
-
-        camera->Transform()->Move(move);
-    }
-
-    if (Input::IsMouseDown(MouseButton::Right) && !ImGui::GetIO().WantCaptureMouse) {
-        glm::vec2 delta = Input::GetMouseDelta();
-
-        float sensitivity = 0.25f;
-
-        camera->Transform()->rot.y -= delta.x * sensitivity;
-        camera->Transform()->rot.x -= delta.y * sensitivity;
-
-        if (camera->Transform()->rot.x > 90.f)  camera->Transform()->rot.x = 90.f;
-        if (camera->Transform()->rot.x < -90.f) camera->Transform()->rot.x = -90.f;
-
-        float scroll = Input::GetScrollDelta();
-        if (scroll != 0.0f) {
-            camera->GetComponent<CameraComponent>()->fov -= scroll * 5.0f;
-        }
-    }
+    DebugCameraMovement(deltaTime);
 
     if (debugUI) {
         ImGui::Begin("Ocean Settings (FBM)");
