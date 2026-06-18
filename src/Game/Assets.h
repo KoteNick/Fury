@@ -7,6 +7,7 @@ class Assets {
 private:
     static std::unordered_map<std::string, std::unique_ptr<Mesh>> meshes;
     static std::unordered_map<std::string, std::unique_ptr<Shader>> shaders;
+    static std::unordered_map<std::string, std::unique_ptr<Texture>> textures;
     static std::unordered_map<std::string, Material> materials;
 
 public:
@@ -22,7 +23,6 @@ public:
         return *meshes[name];
     }
 
-
     static Shader* GetShader(const std::string& name) {
         auto it = shaders.find(name);
         if (it != shaders.end())
@@ -33,6 +33,18 @@ public:
     static Shader& AddShader(const std::string& name) {
         shaders[name] = std::make_unique<Shader>();
         return *shaders[name];
+    }
+
+    static Texture* GetTexture(const std::string& name) {
+        auto it = textures.find(name);
+        if (it != textures.end())
+            return it->second.get();
+        return nullptr;
+    }
+
+    static Texture& AddTexture(const std::string& name, Texture&& texture) {
+        textures[name] = std::make_unique<Texture>(std::move(texture));
+        return *textures[name];
     }
 
     static Material& GetMaterial(const std::string& name) {

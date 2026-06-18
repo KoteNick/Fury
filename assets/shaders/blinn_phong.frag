@@ -14,22 +14,23 @@ struct LightData {
 
 #define MAX_LIGHTS 8
 
-layout (std140, binding = 2) uniform LightsUBO {
+layout (std140) uniform LightsUBO {
     int u_LightCount;
     LightData u_Lights[MAX_LIGHTS];
 };
 
-layout (std140, binding = 1) uniform AmbientUBO {
+layout (std140) uniform AmbientUBO {
     vec4 u_GlobalAmbient;
 };
 
-layout(std140, binding = 0) uniform CameraUBO {
+layout(std140) uniform CameraUBO {
     mat4 u_ProjectionView;
     vec4 u_ViewPos;
 };
 
 uniform vec4 u_Color;
 uniform float u_Shininess;
+uniform sampler2D u_DiffuseMap;
 uniform sampler2D u_ShadowMap;
 
 float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
@@ -115,7 +116,11 @@ void main()
         totalLight += CalculateLight(u_Lights[i], normal, viewDir);
     }
 
-    vec3 result = (ambient + totalLight) * u_Color.rgb;
+    vec4 texColor = texture(u_DiffuseMap, v_TexCoord);
+
+    vec4 albedo = texColor * u_Color;
+
+    vec3 result = (ambient + totalLight) * albedo.rgb;
     
-    FragColor = vec4(result, u_Color.a);
+    FragColor = vec4(result, albedo.a);
 }

@@ -136,6 +136,7 @@
     <ClInclude Include="src\Game\BaseScene.h" />
     <ClInclude Include="src\Game\Scenes\OceanScene.h" />
     <ClInclude Include="src\Game\Scenes\Scenes.h" />
+    <ClInclude Include="src\Game\Scenes\SolarScene.h" />
     <ClInclude Include="src\Game\Scenes\TerrainScene.h" />
     <ClInclude Include="src\Game\Scenes\TestScene.h" />
     <ClInclude Include="src\Renderer\FrameBuffer.h" />
@@ -624,6 +625,7 @@
     <ClCompile Include="src\Game\Scenes\FieldScene.cpp" />
     <ClCompile Include="src\Game\BaseScene.cpp" />
     <ClCompile Include="src\Game\Scenes\OceanScene.cpp" />
+    <ClCompile Include="src\Game\Scenes\SolarScene.cpp" />
     <ClCompile Include="src\Game\Scenes\TerrainScene.cpp" />
     <ClCompile Include="src\Game\Scenes\TestScene.cpp" />
     <ClCompile Include="src\Renderer\FrameBuffer.cpp" />

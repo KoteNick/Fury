@@ -9,7 +9,7 @@ out vec3 v_Normal;
 out vec2 v_TexCoord;
 out vec4 v_FragPosLightSpace;
 
-layout(std140, binding = 0) uniform CameraUBO {
+layout(std140) uniform CameraUBO {
     mat4 u_ProjectionView;
     vec4 u_ViewPos;
 };

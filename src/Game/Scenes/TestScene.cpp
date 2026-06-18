@@ -10,9 +10,10 @@ void TestScene::Init()
         .AddComponent(TransformComponent(-0.5, 0.0, 0.0))
         .AddComponent(RenderableComponent(Assets::GetMesh("Triangle"), Assets::GetMaterial("Basic2D")));
 
-    CreateEntity("Cube")
+    Entity& cube = CreateEntity("Cube")
         .AddComponent(TransformComponent(0, 0, 0))
         .AddComponent(RenderableComponent(Assets::GetMesh("Cube"), Assets::GetMaterial("light3d")));
+    cube.GetComponent<RenderableComponent>()->material.AddTexture(Assets::GetTexture("white"), TextureSlot::Diffuse);
 
     CreateEntity("Plane")
         .AddComponent(TransformComponent(0, -2, 0))

@@ -2,13 +2,14 @@
 
 #include "FastNoiseLite.h"
 
-void FieldScene::GenerateHeightmapTexture(int width, int height)
+void FieldScene::GenerateHeightmapTexture(int width, int height, int seed)
 {
     FastNoiseLite noise;
     noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
-    noise.SetFrequency(0.02f);
+    noise.SetFrequency(0.01f);
     noise.SetFractalType(FastNoiseLite::FractalType_FBm);
-    noise.SetFractalOctaves(4);
+    noise.SetFractalOctaves(2);
+    noise.SetSeed(seed);
 
     std::vector<unsigned char> pixels(width * height);
 
@@ -27,7 +28,7 @@ void FieldScene::GenerateHeightmapTexture(int width, int height)
 
 void FieldScene::Init()
 {
-    GenerateHeightmapTexture(512, 512);
+    GenerateHeightmapTexture(512, 512, static_cast<int>(time));
 
     camera = &CreateEntity("camera")
         .AddComponent(TransformComponent(0, 1, 3))
@@ -35,7 +36,7 @@ void FieldScene::Init()
 
     auto& field = CreateEntity("field")
         .AddComponent(TransformComponent(0, 0, 0))
-        .AddComponent(RenderableComponent(Assets::GetMesh("Plane100500"), Assets::GetMaterial("plains")));
+        .AddComponent(RenderableComponent(Assets::GetMesh("Plane100250"), Assets::GetMaterial("plains")));
     field.GetComponent<RenderableComponent>()->material.AddTexture(heightmap.get(), TextureSlot::HeightMap);
     field.GetComponent<RenderableComponent>()->material.uniform<float>("u_HeightScale") = 5;
 
@@ -55,6 +56,7 @@ void FieldScene::Init()
 
 void FieldScene::OnUpdate(float deltaTime)
 {
+    time += deltaTime;
     UpdateEntities(deltaTime);
 
     GetEntity("field")->GetComponent<RenderableComponent>()->material.uniform<glm::vec4>("u_Color") = glm::vec4(fieldColor, 1);

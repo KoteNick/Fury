@@ -24,6 +24,8 @@ void Game::Init() {
     scenes["Test"] = std::make_unique<TestScene>();
     scenes["Ocean"] = std::make_unique<OceanScene>();
     scenes["Terrain"] = std::make_unique<TerrainScene>();
+    scenes["Field"] = std::make_unique<FieldScene>();
+    scenes["Solar"] = std::make_unique<SolarScene>();
 }
 
 void Game::OnUpdate(float deltaTime) {
@@ -53,6 +55,7 @@ void Game::OnUpdate(float deltaTime) {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             }
         }
+        ImGui::Checkbox("Shadow Pass", &shadowPass);
 
         auto stats = Renderer::Get().rendererStats;
         ImGui::Text("Vertices on scene: %i", stats.vertexCount);
@@ -77,7 +80,7 @@ void Game::OnUpdate(float deltaTime) {
     }
 
     if (currentScene)
-        currentScene->OnRender();
+        currentScene->OnRender(shadowPass);
 }
 
 void Game::Close()

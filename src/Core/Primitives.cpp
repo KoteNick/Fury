@@ -121,7 +121,7 @@ VertexData Primitives::CreateSphere(float radius, unsigned int sectorCount, unsi
             s = (float)j / sectorCount;
             t = (float)i / stackCount;
 
-            verts.push_back({ pos, normal, {s, t} });
+            verts.push_back({ pos, normal, {1.-s, 1.-t} });
         }
     }
 

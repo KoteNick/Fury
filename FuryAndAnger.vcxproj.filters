@@ -1002,6 +1002,9 @@
     <ClInclude Include="src\Game\Scenes\OceanScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Game\Scenes\SolarScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1536,6 +1539,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\Scenes\OceanScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Scenes\SolarScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

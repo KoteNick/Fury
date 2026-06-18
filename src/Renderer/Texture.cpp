@@ -41,9 +41,40 @@ Texture::Texture(int width, int height, unsigned char* data, GLenum internalForm
 	Unbind();
 }
 
+Texture::Texture(Texture&& other) noexcept
+	: m_RendererID(other.m_RendererID), m_Width(other.m_Width), m_Height(other.m_Height), m_LocalBuffer(other.m_LocalBuffer)
+{
+	other.m_RendererID = 0;
+	other.m_LocalBuffer = nullptr;
+}
+
+Texture& Texture::operator=(Texture&& other) noexcept
+{
+	if (this != &other) {
+		if (m_RendererID != 0) {
+			glDeleteTextures(1, &m_RendererID);
+		}
+		m_RendererID = other.m_RendererID;
+		m_Width = other.m_Width;
+		m_Height = other.m_Height;
+		m_LocalBuffer = other.m_LocalBuffer;
+
+		other.m_RendererID = 0;
+		other.m_LocalBuffer = nullptr;
+	}
+	return *this;
+}
+
 Texture::~Texture()
 {
-	glDeleteTextures(1, &m_RendererID);
+	if (m_RendererID != 0) {
+		for (int i = 0; i < Config::MAX_TEXTURE_SLOTS; i++) {
+			if (s_BoundTextures[i] == m_RendererID) {
+				s_BoundTextures[i] = 0;
+			}
+		}
+		glDeleteTextures(1, &m_RendererID);
+	}
 }
 
 unsigned int Texture::GetId() const {

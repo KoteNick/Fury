@@ -38,7 +38,7 @@ void BaseScene::UpdateEntities(float deltaTime)
 	}
 }
 
-void BaseScene::OnRender()
+void BaseScene::OnRender(bool shadowPass)
 {
 	LightsUBOData lightData;
 	glm::mat4 sunLightSpaceMatrix = glm::mat4(1.0f);
@@ -75,8 +75,11 @@ void BaseScene::OnRender()
 	Renderer::Get().SetUBO(UBOslot::Lights, lightData);
 
 	Renderer::Get().SetUBO(UBOslot::Ambient, glm::vec4(ambient, 1));
-
-	Renderer::Get().Flush(Assets::GetShader("shadow_map"), sunLightSpaceMatrix);
+    
+    if (shadowPass)
+        Renderer::Get().Flush(Assets::GetShader("shadow_map"), sunLightSpaceMatrix);
+    else
+        Renderer::Get().Flush();
 }
 
 void BaseScene::Init() {

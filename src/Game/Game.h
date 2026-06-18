@@ -22,7 +22,7 @@ public:
 	}
 	static Game& Get() { return *instance; }
 public:
-	bool debugUI = false;
+	bool debugUI = false, shadowPass = true;
 	float time = 0;
 	WindowSize windowSize = {};
 

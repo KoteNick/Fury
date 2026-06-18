@@ -5,3 +5,4 @@
 #include "FieldScene.h"
 #include "TerrainScene.h"
 #include "OceanScene.h"
+#include "SolarScene.h"
